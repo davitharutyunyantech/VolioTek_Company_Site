@@ -1,0 +1,74 @@
+import { ArrowRight, Shield } from 'lucide-react';
+import { CyberSecurityObjects } from './CyberSecurityObjects';
+import { MotionReveal } from './MotionReveal';
+import { SecurityMesh } from './SecurityMesh';
+
+export function Hero() {
+  return (
+    <section className="relative min-h-screen bg-[#071625] overflow-hidden">
+      <SecurityMesh density="medium" glowColor="#18D6BD" />
+
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#071625]/50 to-[#071625]" />
+      <CyberSecurityObjects />
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-32 pb-20 lg:pt-40 lg:pb-32">
+        <div className="max-w-4xl">
+          <MotionReveal mode="load" className="inline-flex items-center space-x-2 px-4 py-2 bg-[#0B2233]/60 border border-[#18D6BD]/20 rounded-full mb-8">
+            <Shield className="w-4 h-4 text-[#18D6BD]" />
+            <span className="text-[#18D6BD] text-sm">HIPAA-Compliant Infrastructure</span>
+          </MotionReveal>
+
+          <MotionReveal
+            as="h1"
+            mode="load"
+            delay={90}
+            className="text-5xl lg:text-6xl xl:text-7xl font-semibold text-[#F0FFFD] leading-tight mb-6"
+          >
+            The secure operations platform for regulated healthcare teams
+          </MotionReveal>
+
+          <MotionReveal mode="load" as="p" delay={180} className="text-xl lg:text-2xl text-[#F0FFFD]/70 leading-relaxed mb-10 max-w-2xl">
+            VolioTek is the product we created for healthcare organizations that need private workflows, precise coordination, and regulatory confidence in one trusted system.
+          </MotionReveal>
+
+          <MotionReveal mode="load" delay={270} className="flex flex-col sm:flex-row gap-4 mb-16">
+            <a
+              href="#demo"
+              className="premium-button inline-flex items-center justify-center px-8 py-4 bg-[#18D6BD] text-[#071625] rounded-lg hover:bg-[#35EAD0] transition-all duration-200 shadow-xl shadow-[#18D6BD]/30 group"
+            >
+              Request Demo
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a
+              href="#capabilities"
+              className="inline-flex items-center justify-center px-8 py-4 border-2 border-[#18D6BD]/50 text-[#F0FFFD] rounded-lg hover:bg-[#18D6BD]/10 hover:border-[#18D6BD] transition-all duration-200"
+            >
+              View Capabilities
+            </a>
+          </MotionReveal>
+
+          <MotionReveal mode="load" delay={360} className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-8 border-t border-[#18D6BD]/20">
+            <div className="motion-metric">
+              <div className="text-3xl font-semibold text-[#18D6BD] mb-1">100%</div>
+              <div className="text-sm text-[#F0FFFD]/60">HIPAA Compliant</div>
+            </div>
+            <div className="motion-metric">
+              <div className="text-3xl font-semibold text-[#18D6BD] mb-1">SOC 2</div>
+              <div className="text-sm text-[#F0FFFD]/60">Type II Certified</div>
+            </div>
+            <div className="motion-metric">
+              <div className="text-3xl font-semibold text-[#18D6BD] mb-1">24/7</div>
+              <div className="text-sm text-[#F0FFFD]/60">Support Available</div>
+            </div>
+            <div className="motion-metric">
+              <div className="text-3xl font-semibold text-[#18D6BD] mb-1">99.9%</div>
+              <div className="text-sm text-[#F0FFFD]/60">Uptime SLA</div>
+            </div>
+          </MotionReveal>
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
+    </section>
+  );
+}
