@@ -30,20 +30,20 @@ export function Process() {
   ];
 
   return (
-    <section className="py-24 lg:py-32 bg-[#EDFAFA]">
+    <section className="section-ambient section-ambient--soft relative overflow-hidden py-24 lg:py-32 bg-[#EDFAFA]">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <MotionReveal className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl lg:text-5xl font-semibold text-[#071625] mb-6">
+        <div className="process-heading text-center max-w-3xl mx-auto mb-16">
+          <MotionReveal as="h2" threshold={0.08} variant="heading" className="text-4xl lg:text-5xl font-semibold text-[#071625] mb-6">
             How teams adopt VolioTek
-          </h2>
-          <p className="text-xl text-gray-600 leading-relaxed">
+          </MotionReveal>
+          <MotionReveal as="p" delay={90} threshold={0.08} variant="heading" className="text-xl text-gray-600 leading-relaxed">
             A practical onboarding path for healthcare organizations adopting a secure, compliant operations product.
-          </p>
-        </MotionReveal>
+          </MotionReveal>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
-            <MotionReveal key={index} delay={index * 100} className="process-step relative">
+            <MotionReveal key={index} delay={160 + index * 140} threshold={0.08} variant="card" className="process-step relative">
               <div className="motion-card bg-white p-8 rounded-lg border border-gray-200 hover:border-[#18D6BD]/50 hover:shadow-lg transition-all duration-300 h-full">
                 <div className="w-12 h-12 bg-[#18D6BD]/10 rounded-lg flex items-center justify-center mb-6">
                   <step.icon className="w-6 h-6 text-[#07988D]" />

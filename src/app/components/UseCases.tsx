@@ -24,22 +24,23 @@ export function UseCases() {
   ];
 
   return (
-    <section className="py-24 lg:py-32 bg-white">
+    <section className="section-ambient section-ambient--light relative overflow-hidden py-24 lg:py-32 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <MotionReveal className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl lg:text-5xl font-semibold text-[#071625] mb-6">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <MotionReveal as="h2" variant="heading" className="text-4xl lg:text-5xl font-semibold text-[#071625] mb-6">
             Who we serve
-          </h2>
-          <p className="text-xl text-gray-600 leading-relaxed">
+          </MotionReveal>
+          <MotionReveal as="p" delay={90} variant="heading" className="text-xl text-gray-600 leading-relaxed">
             VolioTek serves healthcare organizations that need secure, reliable product infrastructure for regulated operations.
-          </p>
-        </MotionReveal>
+          </MotionReveal>
+        </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {useCases.map((useCase, index) => (
             <MotionReveal
               key={index}
               delay={index * 100}
+              variant="card"
               className="motion-card group bg-white border border-gray-200 rounded-lg p-8 hover:border-[#18D6BD]/50 hover:shadow-xl transition-all duration-300"
             >
               <div className="w-14 h-14 bg-[#EDFAFA] rounded-lg flex items-center justify-center mb-6 group-hover:bg-[#18D6BD]/10 transition-colors">

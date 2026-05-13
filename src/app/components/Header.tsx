@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let frameId: number | null = null;
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    const timeoutIds: ReturnType<typeof setTimeout>[] = [];
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -31,14 +31,18 @@ export function Header() {
         });
       });
 
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId);
-      }
+      timeoutIds.push(
+        setTimeout(handleScroll, 0),
+        setTimeout(handleScroll, 80),
+        setTimeout(handleScroll, 180),
+        setTimeout(handleScroll, 360),
+      );
+    };
 
-      timeoutId = setTimeout(() => {
-        handleScroll();
-        timeoutId = null;
-      }, 150);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        syncScrollState();
+      }
     };
 
     syncScrollState();
@@ -46,21 +50,23 @@ export function Header() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('load', syncScrollState);
     window.addEventListener('pageshow', syncScrollState);
+    window.addEventListener('focus', syncScrollState);
     window.addEventListener('resize', syncScrollState);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('load', syncScrollState);
       window.removeEventListener('pageshow', syncScrollState);
+      window.removeEventListener('focus', syncScrollState);
       window.removeEventListener('resize', syncScrollState);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
 
       if (frameId !== null) {
         cancelAnimationFrame(frameId);
       }
 
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId);
-      }
+      timeoutIds.forEach(clearTimeout);
     };
   }, []);
 
@@ -72,7 +78,8 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      data-site-header
+      className={`site-header fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-[#071625]/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
       }`}
     >

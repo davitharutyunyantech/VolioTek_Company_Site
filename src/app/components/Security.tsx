@@ -37,28 +37,29 @@ export function Security() {
   ];
 
   return (
-    <section id="security" className="relative py-24 lg:py-32 bg-[#0B1F2C] overflow-hidden">
+    <section id="security" className="section-ambient section-ambient--dark relative py-24 lg:py-32 bg-[#0B1F2C] overflow-hidden">
       <SecurityMesh density="low" glowColor="#18D6BD" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
-        <MotionReveal className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center space-x-2 px-4 py-2 bg-[#0B2233]/60 border border-[#18D6BD]/20 rounded-full mb-6">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <MotionReveal variant="heading" className="inline-flex items-center space-x-2 px-4 py-2 bg-[#0B2233]/60 border border-[#18D6BD]/20 rounded-full mb-6">
             <Shield className="w-4 h-4 text-[#18D6BD]" />
             <span className="text-[#18D6BD] text-sm">Enterprise-Grade Security</span>
-          </div>
-          <h2 className="text-4xl lg:text-5xl font-semibold text-[#F0FFFD] mb-6">
+          </MotionReveal>
+          <MotionReveal as="h2" delay={90} variant="heading" className="text-4xl lg:text-5xl font-semibold text-[#F0FFFD] mb-6">
             Security and privacy by design
-          </h2>
-          <p className="text-xl text-[#F0FFFD]/70 leading-relaxed">
+          </MotionReveal>
+          <MotionReveal as="p" delay={180} variant="heading" className="text-xl text-[#F0FFFD]/70 leading-relaxed">
             The VolioTek platform includes security controls, regulatory safeguards, and operational protections as part of the core product.
-          </p>
-        </MotionReveal>
+          </MotionReveal>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {securityPrinciples.map((principle, index) => (
             <MotionReveal
               key={index}
               delay={index * 85}
+              variant="card"
               className="motion-card motion-card--dark group p-8 bg-[#0B2233]/40 backdrop-blur-sm border border-[#18D6BD]/20 rounded-lg hover:bg-[#0B2233]/60 hover:border-[#18D6BD]/50 transition-all duration-300"
             >
               <div className="w-12 h-12 bg-[#18D6BD]/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-[#18D6BD]/20 transition-colors">
@@ -74,7 +75,7 @@ export function Security() {
           ))}
         </div>
 
-        <MotionReveal delay={160} className="motion-panel mt-16 p-8 lg:p-12 bg-[#0B2233]/40 backdrop-blur-sm border border-[#18D6BD]/20 rounded-lg">
+        <MotionReveal delay={160} variant="panel" className="motion-panel mt-16 p-8 lg:p-12 bg-[#0B2233]/40 backdrop-blur-sm border border-[#18D6BD]/20 rounded-lg">
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="text-3xl font-semibold text-[#18D6BD] mb-2">SOC 2 Type II</div>

@@ -1,9 +1,5 @@
-import { connection } from 'next/server';
-
 import App from './App';
 
-export default async function Page() {
-  await connection();
-
+export default function Page() {
   return <App />;
 }

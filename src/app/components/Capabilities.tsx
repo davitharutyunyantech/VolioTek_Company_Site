@@ -36,22 +36,23 @@ export function Capabilities() {
   ];
 
   return (
-    <section id="capabilities" className="py-24 lg:py-32 bg-white">
+    <section id="capabilities" className="section-ambient section-ambient--light relative overflow-hidden py-24 lg:py-32 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <MotionReveal className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl lg:text-5xl font-semibold text-[#071625] mb-6">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <MotionReveal as="h2" variant="heading" className="text-4xl lg:text-5xl font-semibold text-[#071625] mb-6">
             What VolioTek does
-          </h2>
-          <p className="text-xl text-gray-600 leading-relaxed">
+          </MotionReveal>
+          <MotionReveal as="p" delay={90} variant="heading" className="text-xl text-gray-600 leading-relaxed">
             A secure, scalable product for healthcare organizations that need precision, reliability, and regulatory confidence.
-          </p>
-        </MotionReveal>
+          </MotionReveal>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {capabilities.map((capability, index) => (
             <MotionReveal
               key={index}
               delay={index * 85}
+              variant="card"
               className="motion-card group p-8 bg-white border border-gray-200 rounded-lg hover:border-[#18D6BD]/50 hover:shadow-xl transition-all duration-300"
             >
               <div className="w-12 h-12 bg-[#EDFAFA] rounded-lg flex items-center justify-center mb-6 group-hover:bg-[#18D6BD]/10 transition-colors">

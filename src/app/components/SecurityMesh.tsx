@@ -21,17 +21,55 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
     let animationId: number | null = null;
     let isRunning = false;
     let isInViewport = false;
+    let lastFrameTime = 0;
+    let canvasWidth = 0;
+    let canvasHeight = 0;
+    let pixelRatio = 1;
+    const frameInterval = 1000 / 30;
 
-    const resize = () => {
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    const resize = (force = false) => {
+      const nextPixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+      const nextWidth = Math.round(canvas.offsetWidth * nextPixelRatio);
+      const nextHeight = Math.round(canvas.offsetHeight * nextPixelRatio);
 
-      canvas.width = canvas.offsetWidth * pixelRatio;
-      canvas.height = canvas.offsetHeight * pixelRatio;
+      if (!force && nextWidth === canvasWidth && nextHeight === canvasHeight && nextPixelRatio === pixelRatio) {
+        return;
+      }
+
+      canvasWidth = nextWidth;
+      canvasHeight = nextHeight;
+      pixelRatio = nextPixelRatio;
+
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
       ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     };
 
-    resize();
-    window.addEventListener('resize', resize);
+    const isCanvasInViewport = () => {
+      const rect = canvas.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+
+      return (
+        rect.bottom >= -160 &&
+        rect.right >= 0 &&
+        rect.top <= viewportHeight + 160 &&
+        rect.left <= viewportWidth
+      );
+    };
+
+    const syncViewportState = () => {
+      isInViewport = isCanvasInViewport();
+    };
+
+    const handleResize = () => {
+      resize();
+      syncViewportState();
+      start(true);
+    };
+
+    resize(true);
+    window.addEventListener('resize', handleResize);
 
     const nodeCount = density === 'low' ? 14 : density === 'high' ? 36 : 26;
     const maxDistance = 142;
@@ -70,12 +108,19 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
       }
 
       resize();
+      syncViewportState();
       start(true);
     };
 
-    const animate = () => {
+    const animate = (time = 0) => {
       if (!isRunning) return;
 
+      if (time - lastFrameTime < frameInterval) {
+        animationId = requestAnimationFrame(animate);
+        return;
+      }
+
+      lastFrameTime = time;
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
 
       nodes.forEach((node) => {
@@ -132,18 +177,21 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
       }
 
       isRunning = true;
+      lastFrameTime = 0;
       animationId = requestAnimationFrame(animate);
     };
 
     const handlePageShow = () => {
       stop();
       resize();
+      syncViewportState();
       start(true);
     };
 
     const handleFocus = () => {
       stop();
       resize();
+      syncViewportState();
       start(true);
     };
 
@@ -154,6 +202,7 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
       }
 
       resize();
+      syncViewportState();
       stop();
       start(true);
     };
@@ -186,13 +235,12 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
     document.addEventListener('visibilitychange', handleVisibilityChange);
     motionQuery.addEventListener('change', handleMotionPreferenceChange);
 
-    if (!motionQuery.matches && isInViewport) {
-      start();
-    }
+    syncViewportState();
+    start();
 
     return () => {
       observer?.disconnect();
-      window.removeEventListener('resize', resize);
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('pageshow', handlePageShow);
       window.removeEventListener('pagehide', stop);
       window.removeEventListener('focus', handleFocus);
