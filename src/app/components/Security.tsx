@@ -75,22 +75,6 @@ export function Security() {
           ))}
         </div>
 
-        <MotionReveal delay={160} variant="panel" className="motion-panel mt-16 p-8 lg:p-12 bg-[#0B2233]/40 backdrop-blur-sm border border-[#18D6BD]/20 rounded-lg">
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="text-3xl font-semibold text-[#18D6BD] mb-2">SOC 2 Type II</div>
-              <div className="text-[#F0FFFD]/70">Independently audited security controls</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-semibold text-[#18D6BD] mb-2">ISO 27001</div>
-              <div className="text-[#F0FFFD]/70">Information security management</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-semibold text-[#18D6BD] mb-2">HITRUST CSF</div>
-              <div className="text-[#F0FFFD]/70">Healthcare security framework certified</div>
-            </div>
-          </div>
-        </MotionReveal>
       </div>
     </section>
   );

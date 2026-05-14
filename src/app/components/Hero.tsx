@@ -47,14 +47,10 @@ export function Hero() {
             </a>
           </MotionReveal>
 
-          <MotionReveal mode="load" delay={360} className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-8 border-t border-[#18D6BD]/20">
+          <MotionReveal mode="load" delay={360} className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 border-t border-[#18D6BD]/20">
             <div className="motion-metric">
               <div className="text-3xl font-semibold text-[#18D6BD] mb-1">100%</div>
               <div className="text-sm text-[#F0FFFD]/60">HIPAA Compliant</div>
-            </div>
-            <div className="motion-metric">
-              <div className="text-3xl font-semibold text-[#18D6BD] mb-1">SOC 2</div>
-              <div className="text-sm text-[#F0FFFD]/60">Type II Certified</div>
             </div>
             <div className="motion-metric">
               <div className="text-3xl font-semibold text-[#18D6BD] mb-1">24/7</div>

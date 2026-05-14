@@ -41,7 +41,7 @@ export function UseCases() {
               key={index}
               delay={index * 100}
               variant="card"
-              className="motion-card group bg-white border border-gray-200 rounded-lg p-8 hover:border-[#18D6BD]/50 hover:shadow-xl transition-all duration-300"
+              className="motion-card group bg-white border border-gray-200 rounded-lg p-8 hover:border-[#18D6BD]/50 transition-all duration-300"
             >
               <div className="w-14 h-14 bg-[#EDFAFA] rounded-lg flex items-center justify-center mb-6 group-hover:bg-[#18D6BD]/10 transition-colors">
                 <useCase.icon className="w-7 h-7 text-[#07988D]" />

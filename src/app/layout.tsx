@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${robotoMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${robotoMono.variable}`} suppressHydrationWarning>
       <head>
         <Script
           id="motion-reveal-recovery"

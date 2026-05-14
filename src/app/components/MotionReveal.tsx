@@ -154,6 +154,7 @@ export function MotionReveal({
       className={`motion-reveal ${mode === 'load' ? 'motion-reveal--load' : 'motion-reveal--pending'} ${className}`}
       data-motion-delay={delay}
       data-motion-variant={variant}
+      suppressHydrationWarning
     >
       {children}
     </Component>

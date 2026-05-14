@@ -44,7 +44,7 @@ export function Process() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
             <MotionReveal key={index} delay={160 + index * 140} threshold={0.08} variant="card" className="process-step relative">
-              <div className="motion-card bg-white p-8 rounded-lg border border-gray-200 hover:border-[#18D6BD]/50 hover:shadow-lg transition-all duration-300 h-full">
+              <div className="motion-card bg-white p-8 rounded-lg border border-gray-200 hover:border-[#18D6BD]/50 transition-all duration-300 h-full">
                 <div className="w-12 h-12 bg-[#18D6BD]/10 rounded-lg flex items-center justify-center mb-6">
                   <step.icon className="w-6 h-6 text-[#07988D]" />
                 </div>

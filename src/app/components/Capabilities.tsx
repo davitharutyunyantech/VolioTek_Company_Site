@@ -53,7 +53,7 @@ export function Capabilities() {
               key={index}
               delay={index * 85}
               variant="card"
-              className="motion-card group p-8 bg-white border border-gray-200 rounded-lg hover:border-[#18D6BD]/50 hover:shadow-xl transition-all duration-300"
+              className="motion-card group p-8 bg-white border border-gray-200 rounded-lg hover:border-[#18D6BD]/50 transition-all duration-300"
             >
               <div className="w-12 h-12 bg-[#EDFAFA] rounded-lg flex items-center justify-center mb-6 group-hover:bg-[#18D6BD]/10 transition-colors">
                 <capability.icon className="w-6 h-6 text-[#07988D]" />

@@ -39,7 +39,7 @@ export function Footer() {
             </p>
             <div className="flex items-center space-x-2 text-[#18D6BD] text-sm">
               <Shield className="w-4 h-4" />
-              <span>HIPAA Compliant • SOC 2 Type II • HITRUST CSF</span>
+              <span>HIPAA Compliant</span>
             </div>
           </div>
 
