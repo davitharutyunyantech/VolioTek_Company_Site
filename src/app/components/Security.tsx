@@ -47,7 +47,7 @@ export function Security() {
             <span className="text-[#18D6BD] text-sm">Enterprise-Grade Security</span>
           </MotionReveal>
           <MotionReveal as="h2" delay={90} variant="heading" className="text-4xl lg:text-5xl font-semibold text-[#F0FFFD] mb-6">
-            Security and privacy by design
+            Security and privacy <span className="text-[#18D6BD]">by design</span>
           </MotionReveal>
           <MotionReveal as="p" delay={180} variant="heading" className="text-xl text-[#F0FFFD]/70 leading-relaxed">
             The VolioTek platform includes security controls, regulatory safeguards, and operational protections as part of the core product.

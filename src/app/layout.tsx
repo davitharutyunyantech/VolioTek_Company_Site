@@ -95,6 +95,28 @@ export default function RootLayout({
                   document.documentElement.toggleAttribute('data-page-scrolled', window.scrollY > 20);
                 }
 
+                function setMobileMenuOpen(isOpen) {
+                  var button = document.querySelector('[data-mobile-menu-button]');
+                  var menu = document.getElementById('mobile-menu');
+
+                  document.documentElement.toggleAttribute('data-mobile-menu-open', isOpen);
+
+                  if (button) {
+                    button.setAttribute('aria-expanded', String(isOpen));
+                  }
+
+                  if (menu) {
+                    menu.setAttribute('aria-hidden', String(!isOpen));
+                    menu.setAttribute('data-mobile-menu-open', String(isOpen));
+                  }
+
+                  window.dispatchEvent(new CustomEvent('mobile-menu-state-change', { detail: { isOpen: isOpen } }));
+                }
+
+                function toggleMobileMenu() {
+                  setMobileMenuOpen(!document.documentElement.hasAttribute('data-mobile-menu-open'));
+                }
+
                 function revealElement(element) {
                   element.classList.remove('motion-reveal--pending');
                   element.classList.add('motion-reveal--visible');
@@ -136,6 +158,7 @@ export default function RootLayout({
 
                 function syncAfterRestore() {
                   syncHeaderState();
+                  setMobileMenuOpen(false);
                   scheduleSyncMotionReveal();
 
                   if (timeoutId) {
@@ -155,6 +178,21 @@ export default function RootLayout({
                   }
                 }
 
+                document.addEventListener('click', function (event) {
+                  var button = event.target && event.target.closest ? event.target.closest('[data-mobile-menu-button]') : null;
+                  var menuLink = event.target && event.target.closest ? event.target.closest('#mobile-menu a') : null;
+
+                  if (button) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    toggleMobileMenu();
+                    return;
+                  }
+
+                  if (menuLink) {
+                    setMobileMenuOpen(false);
+                  }
+                }, true);
                 window.addEventListener('pageshow', syncAfterRestore);
                 window.addEventListener('focus', syncAfterRestore);
                 window.addEventListener('scroll', function () {

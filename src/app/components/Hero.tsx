@@ -24,7 +24,7 @@ export function Hero() {
             delay={90}
             className="text-5xl lg:text-6xl xl:text-7xl font-semibold text-[#F0FFFD] leading-tight mb-6"
           >
-            The secure operations platform for regulated healthcare teams
+            The secure operations platform for regulated <span className="text-[#18D6BD]">healthcare teams</span>
           </MotionReveal>
 
           <MotionReveal mode="load" as="p" delay={180} className="text-xl lg:text-2xl text-[#F0FFFD]/70 leading-relaxed mb-10 max-w-2xl">

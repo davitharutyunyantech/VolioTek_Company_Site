@@ -9,7 +9,7 @@ export function FinalCTA() {
 
       <div className="relative max-w-4xl mx-auto px-6 lg:px-12 text-center">
         <MotionReveal as="h2" variant="heading" className="text-4xl lg:text-5xl font-semibold text-[#F0FFFD] mb-6">
-          Ready to see VolioTek in action?
+          Ready to see VolioTek <span className="text-[#18D6BD]">in action?</span>
         </MotionReveal>
         <MotionReveal as="p" delay={90} variant="heading" className="text-xl text-[#F0FFFD]/70 leading-relaxed mb-10 max-w-2xl mx-auto">
           See how the platform supports regulated workflows, secure access, compliance visibility, and operational coordination for healthcare teams.

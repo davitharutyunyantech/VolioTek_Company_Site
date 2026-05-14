@@ -1,30 +1,27 @@
 'use client';
 
 import Image from 'next/image';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 export function Header() {
   const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
   const isMobileMenuOpenRef = useRef(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const syncMobileMenuDom = (isOpen: boolean) => {
-    isMobileMenuOpenRef.current = isOpen;
-    mobileMenuButtonRef.current?.setAttribute('aria-expanded', String(isOpen));
+  const setSyncedMobileMenuOpen = useCallback((nextIsOpen: boolean) => {
+    isMobileMenuOpenRef.current = nextIsOpen;
+    setIsMobileMenuOpen(nextIsOpen);
+  }, []);
 
-    if (mobileMenuRef.current) {
-      mobileMenuRef.current.hidden = !isOpen;
-      mobileMenuRef.current.toggleAttribute('data-mobile-menu-open', isOpen);
-    }
-  };
+  const closeMobileMenu = useCallback(() => {
+    setSyncedMobileMenuOpen(false);
+  }, [setSyncedMobileMenuOpen]);
 
-  const closeMobileMenu = () => {
-    syncMobileMenuDom(false);
-    setIsMobileMenuOpen(false);
-  };
+  const toggleMobileMenu = useCallback(() => {
+    setSyncedMobileMenuOpen(!isMobileMenuOpenRef.current);
+  }, [setSyncedMobileMenuOpen]);
 
   useLayoutEffect(() => {
     let frameId: number | null = null;
@@ -90,7 +87,39 @@ export function Header() {
   }, []);
 
   useLayoutEffect(() => {
-    syncMobileMenuDom(isMobileMenuOpen);
+    const resetMobileMenuAfterRestore = () => {
+      setSyncedMobileMenuOpen(false);
+    };
+
+    window.addEventListener('pageshow', resetMobileMenuAfterRestore);
+    window.addEventListener('popstate', resetMobileMenuAfterRestore);
+
+    return () => {
+      window.removeEventListener('pageshow', resetMobileMenuAfterRestore);
+      window.removeEventListener('popstate', resetMobileMenuAfterRestore);
+    };
+  }, [setSyncedMobileMenuOpen]);
+
+  useLayoutEffect(() => {
+    document.documentElement.toggleAttribute('data-mobile-menu-open', isMobileMenuOpen);
+  }, [isMobileMenuOpen]);
+
+  useLayoutEffect(() => {
+    const handleGlobalMobileMenuStateChange = (event: Event) => {
+      const nextIsOpen = Boolean((event as CustomEvent<{ isOpen?: boolean }>).detail?.isOpen);
+      isMobileMenuOpenRef.current = nextIsOpen;
+      setIsMobileMenuOpen(nextIsOpen);
+    };
+
+    window.addEventListener('mobile-menu-state-change', handleGlobalMobileMenuStateChange);
+
+    return () => {
+      window.removeEventListener('mobile-menu-state-change', handleGlobalMobileMenuStateChange);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    isMobileMenuOpenRef.current = isMobileMenuOpen;
   }, [isMobileMenuOpen]);
 
   useLayoutEffect(() => {
@@ -100,27 +129,17 @@ export function Header() {
       return undefined;
     }
 
-    const toggleMobileMenu = (event: MouseEvent) => {
+    const handleButtonClick = (event: MouseEvent) => {
       event.preventDefault();
-      const nextIsOpen = !isMobileMenuOpenRef.current;
-
-      syncMobileMenuDom(nextIsOpen);
-      setIsMobileMenuOpen(nextIsOpen);
+      toggleMobileMenu();
     };
 
-    const resetMobileMenu = () => {
-      syncMobileMenuDom(false);
-      setIsMobileMenuOpen(false);
-    };
-
-    button.addEventListener('click', toggleMobileMenu, { capture: true });
-    window.addEventListener('pageshow', resetMobileMenu);
+    button.addEventListener('click', handleButtonClick);
 
     return () => {
-      button.removeEventListener('click', toggleMobileMenu, { capture: true });
-      window.removeEventListener('pageshow', resetMobileMenu);
+      button.removeEventListener('click', handleButtonClick);
     };
-  }, []);
+  }, [toggleMobileMenu]);
 
   const navItems = [
     { label: 'Capabilities', href: '#capabilities' },
@@ -183,21 +202,33 @@ export function Header() {
           <button
             ref={mobileMenuButtonRef}
             type="button"
-            className="relative z-[70] inline-flex h-11 w-11 items-center justify-center rounded-lg text-[#F0FFFD] transition-colors duration-200 hover:bg-[#18D6BD]/10 md:hidden"
+            data-mobile-menu-button
+            className="mobile-menu-button relative z-[70] inline-flex h-11 w-11 items-center justify-center rounded-lg text-[#F0FFFD] transition-[background-color,transform] duration-300 ease-out hover:bg-[#18D6BD]/10 md:hidden"
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            <Menu
+              size={24}
+              aria-hidden="true"
+              data-mobile-menu-icon="open"
+              className="absolute transition-[opacity,transform] duration-300 ease-out"
+            />
+            <X
+              size={24}
+              aria-hidden="true"
+              data-mobile-menu-icon="close"
+              className="absolute transition-[opacity,transform] duration-300 ease-out"
+            />
           </button>
         </div>
       </div>
 
       <div
-        ref={mobileMenuRef}
         id="mobile-menu"
-        hidden={!isMobileMenuOpen}
-        className="absolute left-0 right-0 top-full z-[60] border-t border-[#18D6BD]/20 bg-[#0B1F2C] shadow-2xl shadow-[#071625]/40 md:hidden"
+        data-mobile-menu-open={isMobileMenuOpen}
+        aria-hidden={!isMobileMenuOpen}
+        className="mobile-menu-panel absolute left-0 right-0 top-full z-[60] overflow-hidden border-t border-[#18D6BD]/20 bg-[#0B1F2C] shadow-2xl shadow-[#071625]/40 transition-[max-height,opacity,transform] duration-300 ease-out md:hidden"
       >
         <nav className="px-6 py-4 space-y-4">
           {navItems.map((item) => (
