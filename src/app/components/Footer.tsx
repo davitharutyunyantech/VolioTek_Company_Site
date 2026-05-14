@@ -1,4 +1,4 @@
-import Image from 'next/image';
+/* eslint-disable @next/next/no-img-element -- next/image emits inline styles that violate the strict CSP for this 32px local logo. */
 import { Shield, Mail, MapPin } from 'lucide-react';
 
 export function Footer() {
@@ -28,7 +28,7 @@ export function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <Image
+              <img
                 src="/brand/logo-header-transparent.png"
                 alt=""
                 width={32}

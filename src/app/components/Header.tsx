@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+/* eslint-disable @next/next/no-img-element -- next/image emits inline styles that violate the strict CSP for this 32px local logo. */
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
@@ -145,13 +145,12 @@ export function Header() {
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
             <a href="#" className="flex items-center space-x-3" aria-label="VolioTek home">
-              <Image
+              <img
                 src="/brand/logo-header-transparent.png"
                 alt=""
                 width={32}
                 height={32}
                 className="h-8 w-8 shrink-0"
-                priority
               />
               <span className="text-[#F0FFFD] font-semibold text-xl tracking-tight">
                 VolioTek
