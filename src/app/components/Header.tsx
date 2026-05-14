@@ -1,11 +1,30 @@
 'use client';
 
-import { useLayoutEffect, useState } from 'react';
+import Image from 'next/image';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 export function Header() {
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const isMobileMenuOpenRef = useRef(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const syncMobileMenuDom = (isOpen: boolean) => {
+    isMobileMenuOpenRef.current = isOpen;
+    mobileMenuButtonRef.current?.setAttribute('aria-expanded', String(isOpen));
+
+    if (mobileMenuRef.current) {
+      mobileMenuRef.current.hidden = !isOpen;
+      mobileMenuRef.current.toggleAttribute('data-mobile-menu-open', isOpen);
+    }
+  };
+
+  const closeMobileMenu = () => {
+    syncMobileMenuDom(false);
+    setIsMobileMenuOpen(false);
+  };
 
   useLayoutEffect(() => {
     let frameId: number | null = null;
@@ -70,6 +89,39 @@ export function Header() {
     };
   }, []);
 
+  useLayoutEffect(() => {
+    syncMobileMenuDom(isMobileMenuOpen);
+  }, [isMobileMenuOpen]);
+
+  useLayoutEffect(() => {
+    const button = mobileMenuButtonRef.current;
+
+    if (!button) {
+      return undefined;
+    }
+
+    const toggleMobileMenu = (event: MouseEvent) => {
+      event.preventDefault();
+      const nextIsOpen = !isMobileMenuOpenRef.current;
+
+      syncMobileMenuDom(nextIsOpen);
+      setIsMobileMenuOpen(nextIsOpen);
+    };
+
+    const resetMobileMenu = () => {
+      syncMobileMenuDom(false);
+      setIsMobileMenuOpen(false);
+    };
+
+    button.addEventListener('click', toggleMobileMenu, { capture: true });
+    window.addEventListener('pageshow', resetMobileMenu);
+
+    return () => {
+      button.removeEventListener('click', toggleMobileMenu, { capture: true });
+      window.removeEventListener('pageshow', resetMobileMenu);
+    };
+  }, []);
+
   const navItems = [
     { label: 'Capabilities', href: '#capabilities' },
     { label: 'Security', href: '#security' },
@@ -79,17 +131,22 @@ export function Header() {
   return (
     <header
       data-site-header
-      className={`site-header fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`site-header fixed top-0 left-0 right-0 z-50 overflow-visible transition-all duration-300 ${
         isScrolled ? 'bg-[#071625]/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
-            <a href="#" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-[#18D6BD] rounded flex items-center justify-center">
-                <span className="text-[#071625] font-bold text-lg">V</span>
-              </div>
+            <a href="#" className="flex items-center space-x-3" aria-label="VolioTek home">
+              <Image
+                src="/brand/logo-header-transparent.png"
+                alt=""
+                width={32}
+                height={32}
+                className="h-8 w-8 shrink-0"
+                priority
+              />
               <span className="text-[#F0FFFD] font-semibold text-xl tracking-tight">
                 VolioTek
               </span>
@@ -124,8 +181,9 @@ export function Header() {
           </div>
 
           <button
-            className="md:hidden text-[#F0FFFD]"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            ref={mobileMenuButtonRef}
+            type="button"
+            className="relative z-[70] inline-flex h-11 w-11 items-center justify-center rounded-lg text-[#F0FFFD] transition-colors duration-200 hover:bg-[#18D6BD]/10 md:hidden"
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
@@ -135,38 +193,41 @@ export function Header() {
         </div>
       </div>
 
-      {isMobileMenuOpen && (
-        <div id="mobile-menu" className="md:hidden bg-[#0B1F2C] border-t border-[#18D6BD]/20">
-          <nav className="px-6 py-4 space-y-4">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="block text-[#F0FFFD]/80 hover:text-[#18D6BD] transition-colors duration-200"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
-            <div className="pt-4 space-y-3">
-              <a
-                href="#contact"
-                className="block text-center px-6 py-2.5 border border-[#18D6BD]/50 text-[#18D6BD] rounded-lg"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Contact Us
-              </a>
-              <a
-                href="#demo"
-                className="premium-button block text-center px-6 py-2.5 bg-[#18D6BD] text-[#071625] rounded-lg"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Request Demo
-              </a>
-            </div>
-          </nav>
-        </div>
-      )}
+      <div
+        ref={mobileMenuRef}
+        id="mobile-menu"
+        hidden={!isMobileMenuOpen}
+        className="absolute left-0 right-0 top-full z-[60] border-t border-[#18D6BD]/20 bg-[#0B1F2C] shadow-2xl shadow-[#071625]/40 md:hidden"
+      >
+        <nav className="px-6 py-4 space-y-4">
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="block text-[#F0FFFD]/80 hover:text-[#18D6BD] transition-colors duration-200"
+              onClick={closeMobileMenu}
+            >
+              {item.label}
+            </a>
+          ))}
+          <div className="pt-4 space-y-3">
+            <a
+              href="#contact"
+              className="block text-center px-6 py-2.5 border border-[#18D6BD]/50 text-[#18D6BD] rounded-lg"
+              onClick={closeMobileMenu}
+            >
+              Contact Us
+            </a>
+            <a
+              href="#demo"
+              className="premium-button block text-center px-6 py-2.5 bg-[#18D6BD] text-[#071625] rounded-lg"
+              onClick={closeMobileMenu}
+            >
+              Request Demo
+            </a>
+          </div>
+        </nav>
+      </div>
     </header>
   );
 }

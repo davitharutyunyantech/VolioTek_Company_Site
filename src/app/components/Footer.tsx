@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Shield, Mail, MapPin } from 'lucide-react';
 
 export function Footer() {
@@ -27,9 +28,13 @@ export function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-[#18D6BD] rounded flex items-center justify-center">
-                <span className="text-[#071625] font-bold text-lg">V</span>
-              </div>
+              <Image
+                src="/brand/logo-header-transparent.png"
+                alt=""
+                width={32}
+                height={32}
+                className="h-8 w-8 shrink-0"
+              />
               <span className="text-[#F0FFFD] font-semibold text-xl tracking-tight">
                 VolioTek
               </span>

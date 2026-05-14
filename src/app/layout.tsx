@@ -17,8 +17,61 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://voliotek.com'),
   title: 'VolioTek',
   description: 'A secure operations platform for regulated healthcare teams.',
+  icons: {
+    icon: [
+      {
+        url: '/favicon.ico',
+        sizes: 'any',
+        type: 'image/x-icon',
+      },
+      {
+        url: '/brand/app-icon-dark-header.png',
+        sizes: '160x160',
+        type: 'image/png',
+      },
+      {
+        url: '/icon-192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        url: '/icon-512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
+    ],
+    apple: [
+      {
+        url: '/apple-touch-icon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
+    ],
+  },
+  openGraph: {
+    title: 'VolioTek',
+    description: 'A secure operations platform for regulated healthcare teams.',
+    url: '/',
+    siteName: 'VolioTek',
+    images: [
+      {
+        url: '/brand/banner-light.png',
+        width: 1672,
+        height: 941,
+        alt: 'VolioTek',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'VolioTek',
+    description: 'A secure operations platform for regulated healthcare teams.',
+    images: ['/brand/banner-light.png'],
+  },
 };
 
 export default function RootLayout({
@@ -96,6 +149,12 @@ export default function RootLayout({
                   }, 160);
                 }
 
+                function handleVisibilityChange() {
+                  if (document.visibilityState === 'visible') {
+                    syncAfterRestore();
+                  }
+                }
+
                 window.addEventListener('pageshow', syncAfterRestore);
                 window.addEventListener('focus', syncAfterRestore);
                 window.addEventListener('scroll', function () {
@@ -106,11 +165,7 @@ export default function RootLayout({
                   syncHeaderState();
                   scheduleSyncMotionReveal();
                 });
-                document.addEventListener('visibilitychange', function () {
-                  if (document.visibilityState === 'visible') {
-                    syncAfterRestore();
-                  }
-                });
+                document.addEventListener('visibilitychange', handleVisibilityChange);
 
                 if (document.readyState === 'loading') {
                   document.addEventListener('DOMContentLoaded', syncAfterRestore, { once: true });
