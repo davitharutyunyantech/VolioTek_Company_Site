@@ -1,13 +1,10 @@
 import { ArrowRight, Shield } from 'lucide-react';
 import { CyberSecurityObjects } from './CyberSecurityObjects';
 import { MotionReveal } from './MotionReveal';
-import { SecurityMesh } from './SecurityMesh';
 
 export function Hero() {
   return (
     <section className="section-ambient section-ambient--hero relative min-h-screen bg-[#071625] overflow-hidden">
-      <SecurityMesh density="medium" glowColor="#18D6BD" />
-
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#071625]/50 to-[#071625]" />
       <CyberSecurityObjects />
 

@@ -25,7 +25,6 @@ export function Header() {
 
   useLayoutEffect(() => {
     let frameId: number | null = null;
-    const timeoutIds: ReturnType<typeof setTimeout>[] = [];
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -40,19 +39,8 @@ export function Header() {
 
       frameId = requestAnimationFrame(() => {
         handleScroll();
-
-        frameId = requestAnimationFrame(() => {
-          handleScroll();
-          frameId = null;
-        });
+        frameId = null;
       });
-
-      timeoutIds.push(
-        setTimeout(handleScroll, 0),
-        setTimeout(handleScroll, 80),
-        setTimeout(handleScroll, 180),
-        setTimeout(handleScroll, 360),
-      );
     };
 
     const handleVisibilityChange = () => {
@@ -82,7 +70,6 @@ export function Header() {
         cancelAnimationFrame(frameId);
       }
 
-      timeoutIds.forEach(clearTimeout);
     };
   }, []);
 

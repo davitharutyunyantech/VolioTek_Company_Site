@@ -25,10 +25,11 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
     let canvasWidth = 0;
     let canvasHeight = 0;
     let pixelRatio = 1;
-    const frameInterval = 1000 / 30;
+    let restoreTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    const frameInterval = 1000 / 20;
 
     const resize = (force = false) => {
-      const nextPixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+      const nextPixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
       const nextWidth = Math.round(canvas.offsetWidth * nextPixelRatio);
       const nextHeight = Math.round(canvas.offsetHeight * nextPixelRatio);
 
@@ -97,6 +98,13 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
       if (animationId !== null) {
         cancelAnimationFrame(animationId);
         animationId = null;
+      }
+    };
+
+    const clearRestoreTimeout = () => {
+      if (restoreTimeoutId !== null) {
+        clearTimeout(restoreTimeoutId);
+        restoreTimeoutId = null;
       }
     };
 
@@ -181,29 +189,46 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
       animationId = requestAnimationFrame(animate);
     };
 
-    const handlePageShow = () => {
-      stop();
+    const restore = (delay = 0) => {
+      clearRestoreTimeout();
+
+      if (delay > 0) {
+        restoreTimeoutId = setTimeout(() => {
+          restoreTimeoutId = null;
+          resize();
+          syncViewportState();
+          start(true);
+        }, delay);
+        return;
+      }
+
       resize();
       syncViewportState();
       start(true);
     };
 
-    const handleFocus = () => {
+    const handlePageShow = (event: PageTransitionEvent) => {
+      restore(event.persisted ? 180 : 0);
+    };
+
+    const handlePageHide = () => {
+      clearRestoreTimeout();
       stop();
-      resize();
-      syncViewportState();
-      start(true);
+    };
+
+    const handleFocus = () => {
+      restore();
     };
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
+        clearRestoreTimeout();
         stop();
         return;
       }
 
       resize();
       syncViewportState();
-      stop();
       start(true);
     };
 
@@ -215,7 +240,6 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
         return;
       }
 
-      resize();
       start(true);
     };
 
@@ -230,7 +254,7 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
     }
 
     window.addEventListener('pageshow', handlePageShow);
-    window.addEventListener('pagehide', stop);
+    window.addEventListener('pagehide', handlePageHide);
     window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     motionQuery.addEventListener('change', handleMotionPreferenceChange);
@@ -242,10 +266,11 @@ export function SecurityMesh({ density = 'medium', glowColor = '#18D6BD' }: Secu
       observer?.disconnect();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('pageshow', handlePageShow);
-      window.removeEventListener('pagehide', stop);
+      window.removeEventListener('pagehide', handlePageHide);
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       motionQuery.removeEventListener('change', handleMotionPreferenceChange);
+      clearRestoreTimeout();
       stop();
     };
   }, [density, glowColor]);

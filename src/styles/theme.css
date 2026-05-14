@@ -401,6 +401,14 @@
     transform: translate3d(0, 0, 0) scale(1);
   }
 
+  html[data-page-restored] .section-ambient::before,
+  html[data-page-restored] .motion-metric,
+  html[data-page-restored] .cyber-security-objects__plane,
+  html[data-page-restored] .cyber-security-card,
+  html[data-page-restored] .cyber-security-objects__beam {
+    animation-play-state: paused;
+  }
+
   .motion-card {
     position: relative;
     overflow: hidden;
@@ -569,7 +577,6 @@
     height: 560px;
     pointer-events: none;
     opacity: 0.92;
-    mix-blend-mode: screen;
     perspective: 1200px;
     contain: layout paint style;
   }
@@ -580,7 +587,6 @@
     height: 100%;
     transform: rotateX(56deg) rotateZ(-24deg);
     transform-style: preserve-3d;
-    animation: cyber-security-plane-drift 16s ease-in-out infinite;
   }
 
   .cyber-security-card {
@@ -601,7 +607,6 @@
       0 18px 42px rgba(0, 0, 0, 0.24),
       inset 0 1px 0 rgba(240, 255, 253, 0.08);
     transform-style: preserve-3d;
-    animation: cyber-security-card-float 7s ease-in-out infinite;
   }
 
   .cyber-security-card::before {
@@ -697,7 +702,7 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(24, 214, 189, 0.36), transparent);
     transform-origin: left center;
-    animation: cyber-security-beam-pulse 4.8s ease-in-out infinite;
+    opacity: 0.42;
   }
 
   .cyber-security-objects__beam--one {

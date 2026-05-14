@@ -172,6 +172,18 @@ export default function RootLayout({
                   }, 160);
                 }
 
+                function pauseMotionAfterRestore(event) {
+                  if (!event || !event.persisted) {
+                    return;
+                  }
+
+                  document.documentElement.setAttribute('data-page-restored', 'true');
+
+                  window.setTimeout(function () {
+                    document.documentElement.removeAttribute('data-page-restored');
+                  }, 1200);
+                }
+
                 function handleVisibilityChange() {
                   if (document.visibilityState === 'visible') {
                     syncAfterRestore();
@@ -194,6 +206,7 @@ export default function RootLayout({
                   }
                 }, true);
                 window.addEventListener('pageshow', syncAfterRestore);
+                window.addEventListener('pageshow', pauseMotionAfterRestore);
                 window.addEventListener('focus', syncAfterRestore);
                 window.addEventListener('scroll', function () {
                   syncHeaderState();
