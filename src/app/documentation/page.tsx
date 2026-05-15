@@ -22,7 +22,7 @@ import { SecurityMesh } from '../components/SecurityMesh';
 export const metadata: Metadata = {
   title: 'Documentation | VolioTek Healthcare Operations Platform',
   description:
-    'Explore VolioTek documentation for product evaluation, implementation planning, access control, workflow setup, security review, and regulated healthcare operations.',
+    'Explore VolioTek documentation for product evaluation, implementation planning, access control, workflow setup, and healthcare security review.',
   alternates: {
     canonical: '/documentation',
   },

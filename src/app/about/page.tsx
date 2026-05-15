@@ -63,9 +63,33 @@ const operatingFocus = [
   'Long-term product stewardship after launch, not one-time handoff.',
 ];
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'About VolioTek',
+  url: 'https://voliotek.com/about',
+  description:
+    'Information about VolioTek, the company building secure healthcare operations software for privacy-conscious teams.',
+  publisher: {
+    '@type': 'Organization',
+    name: 'VolioTek',
+    url: 'https://voliotek.com',
+    email: 'contact@voliotek.com',
+    logo: 'https://voliotek.com/brand/logo-header-transparent.png',
+  },
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'VolioTek',
+    url: 'https://voliotek.com',
+    email: 'contact@voliotek.com',
+    description:
+      'VolioTek builds secure healthcare operations software with a focus on privacy, accountability, and dependable implementation.',
+  },
+};
+
 export default function AboutPage() {
   return (
-    <PublicPageShell>
+    <PublicPageShell jsonLd={jsonLd}>
       <PageHero
         eyebrow="About VolioTek"
         EyebrowIcon={LockKeyhole}
