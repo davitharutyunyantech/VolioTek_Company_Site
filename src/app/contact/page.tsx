@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import {
   ArrowRight,
   CalendarClock,
@@ -14,6 +15,9 @@ import { getPublishedPage } from '@/lib/content/store';
 import { genericPageContentSchema } from '@/lib/content/schemas';
 import { ManagedContentSections } from '../components/ManagedContentSections';
 import { Checklist, FinalCta, HeroPanel, IconCardGrid, PageHero, PublicPageShell, SectionIntro, SplitSection } from '../components/PublicPageBlocks';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export function generateMetadata() {
   return buildManagedMetadata('contact');
@@ -76,6 +80,11 @@ const jsonLd = {
 
 export default async function ContactPage() {
   const page = await getPublishedPage('contact');
+
+  if (!page) {
+    notFound();
+  }
+
   const content = genericPageContentSchema.parse(page.content);
 
   return (

@@ -21,6 +21,7 @@ enum AuditAction {
   PUBLISH
   UNPUBLISH
   ARCHIVE
+  RESTORE
   VALIDATION_FAILED
 }
 

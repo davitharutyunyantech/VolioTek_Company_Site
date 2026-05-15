@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { ArrowRight, CheckCircle2, FileText, LockKeyhole, ShieldCheck, Users } from 'lucide-react';
 
 import { buildManagedMetadata } from '@/lib/content/metadata';
@@ -5,6 +6,9 @@ import { getPublishedPage } from '@/lib/content/store';
 import { genericPageContentSchema } from '@/lib/content/schemas';
 import { ManagedContentSections } from '../components/ManagedContentSections';
 import { Checklist, FinalCta, IconCardGrid, PageHero, PublicPageShell, SectionIntro, SplitSection } from '../components/PublicPageBlocks';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export function generateMetadata() {
   return buildManagedMetadata('about');
@@ -64,6 +68,11 @@ const jsonLd = {
 
 export default async function AboutPage() {
   const page = await getPublishedPage('about');
+
+  if (!page) {
+    notFound();
+  }
+
   const content = genericPageContentSchema.parse(page.content);
 
   return (

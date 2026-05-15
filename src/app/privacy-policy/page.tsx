@@ -1,9 +1,13 @@
+import { notFound } from 'next/navigation';
 import { ArrowRight, BadgeCheck, ClipboardList, LockKeyhole, ShieldCheck } from 'lucide-react';
 
 import { buildManagedMetadata } from '@/lib/content/metadata';
 import { getPublishedPage } from '@/lib/content/store';
 import { genericPageContentSchema } from '@/lib/content/schemas';
 import { DetailList, FinalCta, HeroPanel, PageHero, PublicPageShell, SplitSection } from '../components/PublicPageBlocks';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const lastUpdated = 'May 15, 2026';
 
@@ -57,6 +61,11 @@ const jsonLd = {
 
 export default async function PrivacyPolicyPage() {
   const page = await getPublishedPage('privacy-policy');
+
+  if (!page) {
+    notFound();
+  }
+
   const content = genericPageContentSchema.parse(page.content);
   const managedSections = content.sections.length > 0 ? content.sections : privacySections;
 

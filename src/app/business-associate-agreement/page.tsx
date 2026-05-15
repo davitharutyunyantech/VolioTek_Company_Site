@@ -1,9 +1,13 @@
+import { notFound } from 'next/navigation';
 import { ArrowRight, ClipboardCheck, FileText, LockKeyhole, ShieldCheck } from 'lucide-react';
 
 import { buildManagedMetadata } from '@/lib/content/metadata';
 import { getPublishedPage } from '@/lib/content/store';
 import { genericPageContentSchema } from '@/lib/content/schemas';
 import { DetailList, FinalCta, HeroPanel, PageHero, PublicPageShell, SplitSection } from '../components/PublicPageBlocks';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export function generateMetadata() {
   return buildManagedMetadata('business-associate-agreement');
@@ -44,6 +48,11 @@ const jsonLd = {
 
 export default async function BusinessAssociateAgreementPage() {
   const page = await getPublishedPage('business-associate-agreement');
+
+  if (!page) {
+    notFound();
+  }
+
   const content = genericPageContentSchema.parse(page.content);
   const managedSections = content.sections.length > 0 ? content.sections : baaDetails;
 

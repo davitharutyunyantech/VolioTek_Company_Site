@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import {
   ArrowRight,
   BookOpenText,
@@ -21,6 +22,9 @@ import { Header } from '../components/Header';
 import { ManagedContentSections } from '../components/ManagedContentSections';
 import { MotionReveal } from '../components/MotionReveal';
 import { SecurityMesh } from '../components/SecurityMesh';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export function generateMetadata() {
   return buildManagedMetadata('documentation', 'VolioTek documentation');
@@ -137,6 +141,11 @@ const jsonLd = {
 
 export default async function DocumentationPage() {
   const page = await getPublishedPage('documentation');
+
+  if (!page) {
+    notFound();
+  }
+
   const content = genericPageContentSchema.parse(page.content);
 
   return (

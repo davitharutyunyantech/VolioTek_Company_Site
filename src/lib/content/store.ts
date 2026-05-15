@@ -41,8 +41,12 @@ export async function getPublishedPage(slug: PageSlug) {
     })
     .catch(() => null);
 
-  if (!page?.publishedRevision) {
+  if (!page) {
     return seed;
+  }
+
+  if (page.status !== 'PUBLISHED' || !page.publishedRevision) {
+    return null;
   }
 
   const metadata = metadataSchema.safeParse(page.publishedRevision.metadata);
@@ -187,6 +191,11 @@ export async function saveDraft({
     update: {},
     include: { revisions: { orderBy: { version: 'desc' }, take: 1 } },
   });
+
+  if (page.status === 'ARCHIVED') {
+    throw new Error('Archived pages must be restored before editing.');
+  }
+
   const nextVersion = (page.revisions[0]?.version ?? 0) + 1;
 
   const revision = await prisma.pageRevision.create({
@@ -233,6 +242,10 @@ export async function publishPage(slug: PageSlug, userId: string) {
 
   if (!page?.draftRevision) {
     throw new Error('Draft revision not found.');
+  }
+
+  if (page.status === 'ARCHIVED') {
+    throw new Error('Archived pages must be restored before publishing.');
   }
 
   await prisma.sitePage.update({
@@ -284,5 +297,22 @@ export async function archivePage(slug: PageSlug, userId: string) {
 
   await prisma.auditEvent.create({
     data: { action: 'ARCHIVE', pageId: page.id, userId },
+  });
+}
+
+export async function restorePage(slug: PageSlug, userId: string) {
+  const prisma = getPrisma();
+
+  if (!prisma) {
+    throw new Error('DATABASE_URL is required to restore content.');
+  }
+
+  const page = await prisma.sitePage.update({
+    where: { slug },
+    data: { status: 'UNPUBLISHED' },
+  });
+
+  await prisma.auditEvent.create({
+    data: { action: 'RESTORE', pageId: page.id, userId },
   });
 }

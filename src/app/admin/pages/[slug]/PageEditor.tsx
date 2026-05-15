@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { Archive, ArrowDown, ArrowUp, EyeOff, Plus, Save, Trash2, UploadCloud } from 'lucide-react';
+import { Archive, ArrowDown, ArrowUp, EyeOff, Plus, RotateCcw, Save, Trash2, UploadCloud } from 'lucide-react';
 
 import { adminJsonHeaders, adminMutationHeaders } from '@/lib/admin/csrf';
 import type { EditablePage } from '@/lib/content/store';
@@ -106,6 +106,7 @@ function ActionFields({
 export function PageEditor({ page }: { page: EditablePage }) {
   const router = useRouter();
   const isHome = page.slug === 'home';
+  const isArchived = page.status === 'ARCHIVED';
   const [title, setTitle] = useState(page.metadata.title);
   const [description, setDescription] = useState(page.metadata.description);
   const [canonical, setCanonical] = useState(page.metadata.canonical);
@@ -251,6 +252,11 @@ export function PageEditor({ page }: { page: EditablePage }) {
   }
 
   async function saveDraft() {
+    if (isArchived) {
+      setError('Restore this page before editing.');
+      return;
+    }
+
     if (contentError) {
       setError(`Content JSON is invalid: ${contentError}`);
       return;
@@ -270,7 +276,7 @@ export function PageEditor({ page }: { page: EditablePage }) {
     }
   }
 
-  async function action(name: 'publish' | 'unpublish' | 'archive') {
+  async function action(name: 'publish' | 'unpublish' | 'archive' | 'restore') {
     const ok = await request(`/api/admin/pages/${page.slug}/${name}`, { method: 'POST', headers: adminMutationHeaders() });
 
     if (ok) {
@@ -281,6 +287,11 @@ export function PageEditor({ page }: { page: EditablePage }) {
   return (
     <div className="grid gap-8">
       <Panel title="SEO metadata">
+        {isArchived ? (
+          <p className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            This page is archived. Restore it before editing or publishing.
+          </p>
+        ) : null}
         <Field id="metadata-title" label="Title" value={title} onChange={setTitle} />
         <TextArea id="metadata-description" label="Description" value={description} rows={5} onChange={setDescription} />
         <Field id="metadata-canonical" label="Canonical path" value={canonical} onChange={setCanonical} />
@@ -380,18 +391,27 @@ export function PageEditor({ page }: { page: EditablePage }) {
             <Save className="h-4 w-4" />
             Save draft
           </button>
-          <button type="button" onClick={() => action('publish')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg bg-[#071625] px-5 py-3 font-semibold text-[#F0FFFD] transition hover:bg-[#0B2233] disabled:opacity-60">
-            <UploadCloud className="h-4 w-4" />
-            Publish
-          </button>
-          <button type="button" onClick={() => action('unpublish')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-5 py-3 font-semibold transition hover:border-[#18D6BD] disabled:opacity-60">
-            <EyeOff className="h-4 w-4" />
-            Unpublish
-          </button>
-          <button type="button" onClick={() => action('archive')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-5 py-3 font-semibold text-red-700 transition hover:bg-red-50 disabled:opacity-60">
-            <Archive className="h-4 w-4" />
-            Archive
-          </button>
+          {isArchived ? (
+            <button type="button" onClick={() => action('restore')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg bg-[#071625] px-5 py-3 font-semibold text-[#F0FFFD] transition hover:bg-[#0B2233] disabled:opacity-60">
+              <RotateCcw className="h-4 w-4" />
+              Restore
+            </button>
+          ) : (
+            <>
+              <button type="button" onClick={() => action('publish')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg bg-[#071625] px-5 py-3 font-semibold text-[#F0FFFD] transition hover:bg-[#0B2233] disabled:opacity-60">
+                <UploadCloud className="h-4 w-4" />
+                Publish
+              </button>
+              <button type="button" onClick={() => action('unpublish')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-5 py-3 font-semibold transition hover:border-[#18D6BD] disabled:opacity-60">
+                <EyeOff className="h-4 w-4" />
+                Unpublish
+              </button>
+              <button type="button" onClick={() => action('archive')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-5 py-3 font-semibold text-red-700 transition hover:bg-red-50 disabled:opacity-60">
+                <Archive className="h-4 w-4" />
+                Archive
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

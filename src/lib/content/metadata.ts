@@ -1,10 +1,15 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { getPublishedPage } from './store';
 import type { PageSlug } from './schemas';
 
 export async function buildManagedMetadata(slug: PageSlug, imageAlt = 'VolioTek brand banner'): Promise<Metadata> {
   const page = await getPublishedPage(slug);
+
+  if (!page) {
+    notFound();
+  }
 
   return {
     title: page.metadata.title,

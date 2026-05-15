@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import {
   ArrowRight,
   BadgeCheck,
@@ -19,6 +20,9 @@ import { genericPageContentSchema } from '@/lib/content/schemas';
 import { ManagedContentSections } from '../components/ManagedContentSections';
 import { DetailList, FinalCta, HeroPanel, IconCardGrid, PageHero, PublicPageShell, SectionIntro, SplitSection } from '../components/PublicPageBlocks';
 import { MotionReveal } from '../components/MotionReveal';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const reviewMaterials = [
   {
@@ -163,6 +167,11 @@ const jsonLd = [
 
 export default async function CompliancePage() {
   const page = await getPublishedPage('compliance');
+
+  if (!page) {
+    notFound();
+  }
+
   const content = genericPageContentSchema.parse(page.content);
 
   return (
