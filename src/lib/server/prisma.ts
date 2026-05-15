@@ -1,7 +1,11 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@/generated/prisma/client';
 
-process.loadEnvFile?.('.env');
+try {
+  process.loadEnvFile?.('.env');
+} catch {
+  // Vercel and CI provide environment variables directly without a local .env file.
+}
 
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
