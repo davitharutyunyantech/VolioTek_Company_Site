@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- next/image emits inline styles that violate the strict CSP for this 32px local logo. */
+import Link from 'next/link';
 import { Shield, Mail, MapPin } from 'lucide-react';
 
 export function Footer() {
@@ -6,24 +7,25 @@ export function Footer() {
 
   const footerLinks = {
     company: [
-      { label: 'About', href: '#about' },
-      { label: 'Capabilities', href: '#capabilities' },
-      { label: 'Security', href: '#security' },
+      { label: 'About', href: '/about' },
+      { label: 'Contact', href: '/contact' },
+      { label: 'Capabilities', href: '/#capabilities' },
+      { label: 'Security', href: '/#security' },
     ],
     resources: [
-      { label: 'Documentation', href: '#' },
-      { label: 'Compliance', href: '#' },
-      { label: 'Support', href: '#' },
+      { label: 'Documentation', href: '/documentation' },
+      { label: 'Compliance', href: '/compliance' },
+      { label: 'Support', href: '/contact' },
     ],
     legal: [
-      { label: 'Privacy Policy', href: '#' },
-      { label: 'Terms of Service', href: '#' },
-      { label: 'BAA', href: '#' },
+      { label: 'Privacy Policy', href: '/privacy-policy' },
+      { label: 'Terms of Service', href: '/terms-of-service' },
+      { label: 'BAA', href: '/business-associate-agreement' },
     ],
   };
 
   return (
-    <footer className="bg-[#0B1F2C] border-t border-[#18D6BD]/20">
+    <footer id="contact" className="bg-[#0B1F2C] border-t border-[#18D6BD]/20">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           <div className="lg:col-span-2">
@@ -53,12 +55,12 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-[#F0FFFD]/60 hover:text-[#18D6BD] transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -69,12 +71,12 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-[#F0FFFD]/60 hover:text-[#18D6BD] transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -85,12 +87,12 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-[#F0FFFD]/60 hover:text-[#18D6BD] transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

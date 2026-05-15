@@ -1,6 +1,7 @@
 'use client';
 
 /* eslint-disable @next/next/no-img-element -- next/image emits inline styles that violate the strict CSP for this 32px local logo. */
+import Link from 'next/link';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
@@ -129,9 +130,11 @@ export function Header() {
   }, [toggleMobileMenu]);
 
   const navItems = [
-    { label: 'Capabilities', href: '#capabilities' },
-    { label: 'Security', href: '#security' },
-    { label: 'About', href: '#about' },
+    { label: 'Capabilities', href: '/#capabilities' },
+    { label: 'Security', href: '/#security' },
+    { label: 'Documentation', href: '/documentation' },
+    { label: 'About', href: '/about' },
+    { label: 'Contact', href: '/contact' },
   ];
 
   return (
@@ -144,7 +147,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
-            <a href="#" className="flex items-center space-x-3" aria-label="VolioTek home">
+            <Link href="/" className="flex items-center space-x-3" aria-label="VolioTek home">
               <img
                 src="/brand/logo-header-transparent.png"
                 alt=""
@@ -155,41 +158,41 @@ export function Header() {
               <span className="text-[#F0FFFD] font-semibold text-xl tracking-tight">
                 VolioTek
               </span>
-            </a>
+            </Link>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.label}
                 href={item.href}
                 className="text-[#F0FFFD]/80 hover:text-[#18D6BD] transition-colors duration-200"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center space-x-4">
-            <a
-              href="#contact"
+          <div className="hidden lg:flex items-center space-x-4">
+            <Link
+              href="/contact"
               className="px-6 py-2.5 border border-[#18D6BD]/50 text-[#18D6BD] rounded-lg hover:bg-[#18D6BD]/10 transition-all duration-200"
             >
               Contact Us
-            </a>
-            <a
-              href="#demo"
+            </Link>
+            <Link
+              href="/#demo"
               className="premium-button inline-flex items-center justify-center px-6 py-2.5 bg-[#18D6BD] text-[#071625] rounded-lg hover:bg-[#35EAD0] transition-all duration-200 shadow-lg shadow-[#18D6BD]/20"
             >
               Request Demo
-            </a>
+            </Link>
           </div>
 
           <button
             ref={mobileMenuButtonRef}
             type="button"
             data-mobile-menu-button
-            className="mobile-menu-button relative z-[70] inline-flex h-11 w-11 items-center justify-center rounded-lg text-[#F0FFFD] transition-[background-color,transform] duration-300 ease-out hover:bg-[#18D6BD]/10 md:hidden"
+            className="mobile-menu-button relative z-[70] inline-flex h-11 w-11 items-center justify-center rounded-lg text-[#F0FFFD] transition-[background-color,transform] duration-300 ease-out hover:bg-[#18D6BD]/10 lg:hidden"
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
@@ -214,34 +217,34 @@ export function Header() {
         id="mobile-menu"
         data-mobile-menu-open={isMobileMenuOpen}
         aria-hidden={!isMobileMenuOpen}
-        className="mobile-menu-panel absolute left-0 right-0 top-full z-[60] overflow-hidden border-t border-[#18D6BD]/20 bg-[#0B1F2C] shadow-2xl shadow-[#071625]/40 transition-[max-height,opacity,transform] duration-300 ease-out md:hidden"
+        className="mobile-menu-panel absolute left-0 right-0 top-full z-[60] overflow-hidden border-t border-[#18D6BD]/20 bg-[#0B1F2C] shadow-2xl shadow-[#071625]/40 transition-[max-height,opacity,transform] duration-300 ease-out lg:hidden"
       >
         <nav className="px-6 py-4 space-y-4">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.label}
               href={item.href}
               className="block text-[#F0FFFD]/80 hover:text-[#18D6BD] transition-colors duration-200"
               onClick={closeMobileMenu}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
           <div className="pt-4 space-y-3">
-            <a
-              href="#contact"
+            <Link
+              href="/contact"
               className="block text-center px-6 py-2.5 border border-[#18D6BD]/50 text-[#18D6BD] rounded-lg"
               onClick={closeMobileMenu}
             >
               Contact Us
-            </a>
-            <a
-              href="#demo"
+            </Link>
+            <Link
+              href="/#demo"
               className="premium-button block text-center px-6 py-2.5 bg-[#18D6BD] text-[#071625] rounded-lg"
               onClick={closeMobileMenu}
             >
               Request Demo
-            </a>
+            </Link>
           </div>
         </nav>
       </div>
