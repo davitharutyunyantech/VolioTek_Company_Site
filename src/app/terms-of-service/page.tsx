@@ -1,41 +1,15 @@
-import type { Metadata } from 'next';
 import { ArrowRight, BadgeCheck, ClipboardList, FileText, Scale } from 'lucide-react';
 
+import { buildManagedMetadata } from '@/lib/content/metadata';
+import { getPublishedPage } from '@/lib/content/store';
+import { genericPageContentSchema } from '@/lib/content/schemas';
 import { DetailList, FinalCta, HeroPanel, PageHero, PublicPageShell, SplitSection } from '../components/PublicPageBlocks';
 
 const lastUpdated = 'May 15, 2026';
 
-export const metadata: Metadata = {
-  title: 'Terms of Service | VolioTek',
-  description:
-    'Review the VolioTek Terms of Service for website use, product information, intellectual property, third-party links, disclaimers, and legal contact details.',
-  alternates: {
-    canonical: '/terms-of-service',
-  },
-  openGraph: {
-    title: 'Terms of Service | VolioTek',
-    description:
-      'VolioTek website terms covering acceptable use, product information, intellectual property, third-party links, and disclaimers.',
-    url: '/terms-of-service',
-    siteName: 'VolioTek',
-    images: [
-      {
-        url: '/brand/banner-light.png',
-        width: 1672,
-        height: 941,
-        alt: 'VolioTek brand banner',
-      },
-    ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Terms of Service | VolioTek',
-    description:
-      'Terms for using the VolioTek website and relying on public product information.',
-    images: ['/brand/banner-light.png'],
-  },
-};
+export function generateMetadata() {
+  return buildManagedMetadata('terms-of-service');
+}
 
 const termsSections = [
   {
@@ -81,14 +55,18 @@ const jsonLd = {
   },
 };
 
-export default function TermsOfServicePage() {
+export default async function TermsOfServicePage() {
+  const page = await getPublishedPage('terms-of-service');
+  const content = genericPageContentSchema.parse(page.content);
+  const managedSections = content.sections.length > 0 ? content.sections : termsSections;
+
   return (
     <PublicPageShell jsonLd={jsonLd}>
       <PageHero
         eyebrow="Terms of Service"
         EyebrowIcon={Scale}
-        title={<>Terms for using the <span className="text-[#18D6BD]">VolioTek website.</span></>}
-        description="These terms govern public website use. Separate signed agreements control paid products and customer environments."
+        title={content.headline}
+        description={content.description}
         gridClassName="lg:grid-cols-[1.02fr_0.98fr]"
       >
         <HeroPanel
@@ -104,7 +82,7 @@ export default function TermsOfServicePage() {
         description="These terms explain permitted website use, ownership of public materials, and limits on relying on website content."
         columns="lg:grid-cols-[0.85fr_1.15fr]"
       >
-        <DetailList items={termsSections} Icon={FileText} />
+        <DetailList items={managedSections} Icon={FileText} />
       </SplitSection>
 
       <FinalCta

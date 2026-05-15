@@ -2,8 +2,9 @@ import { ArrowRight, Shield } from 'lucide-react';
 import { CyberSecurityObjects } from './CyberSecurityObjects';
 import { MotionReveal } from './MotionReveal';
 import { SecurityMesh } from './SecurityMesh';
+import type { HomeContent } from '@/lib/content/schemas';
 
-export function Hero() {
+export function Hero({ content }: { content: HomeContent['hero'] }) {
   return (
     <section className="section-ambient section-ambient--hero relative min-h-screen bg-[#071625] overflow-hidden">
       <SecurityMesh density="low" glowColor="#18D6BD" />
@@ -14,7 +15,7 @@ export function Hero() {
         <div className="max-w-4xl">
           <MotionReveal mode="load" className="inline-flex items-center space-x-2 px-4 py-2 bg-[#0B2233]/60 border border-[#18D6BD]/20 rounded-full mb-8">
             <Shield className="w-4 h-4 text-[#18D6BD]" />
-            <span className="text-[#18D6BD] text-sm">HIPAA-Compliant Infrastructure</span>
+            <span className="text-[#18D6BD] text-sm">{content.eyebrow}</span>
           </MotionReveal>
 
           <MotionReveal
@@ -23,42 +24,36 @@ export function Hero() {
             delay={90}
             className="text-5xl lg:text-6xl xl:text-7xl font-semibold text-[#F0FFFD] leading-tight mb-6"
           >
-            The secure operations platform for regulated <span className="text-[#18D6BD]">healthcare teams</span>
+            {content.title} <span className="text-[#18D6BD]">{content.highlightedTitle}</span>
           </MotionReveal>
 
           <MotionReveal mode="load" as="p" delay={180} className="text-xl lg:text-2xl text-[#F0FFFD]/70 leading-relaxed mb-10 max-w-2xl">
-            VolioTek is the product we created for healthcare organizations that need private workflows, precise coordination, and regulatory confidence in one trusted system.
+            {content.description}
           </MotionReveal>
 
           <MotionReveal mode="load" delay={270} className="flex flex-col sm:flex-row gap-4 mb-16">
             <a
-              href="#demo"
+              href={content.primaryAction.href}
               className="premium-button inline-flex items-center justify-center px-8 py-4 bg-[#18D6BD] text-[#071625] rounded-lg hover:bg-[#35EAD0] transition-all duration-200 shadow-xl shadow-[#18D6BD]/30 group"
             >
-              Request Demo
+              {content.primaryAction.label}
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
             <a
-              href="#capabilities"
+              href={content.secondaryAction.href}
               className="inline-flex items-center justify-center px-8 py-4 border-2 border-[#18D6BD]/50 text-[#F0FFFD] rounded-lg hover:bg-[#18D6BD]/10 hover:border-[#18D6BD] transition-all duration-200"
             >
-              View Capabilities
+              {content.secondaryAction.label}
             </a>
           </MotionReveal>
 
           <MotionReveal mode="load" delay={360} className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 border-t border-[#18D6BD]/20">
-            <div className="motion-metric">
-              <div className="text-3xl font-semibold text-[#18D6BD] mb-1">100%</div>
-              <div className="text-sm text-[#F0FFFD]/60">HIPAA Compliant</div>
-            </div>
-            <div className="motion-metric">
-              <div className="text-3xl font-semibold text-[#18D6BD] mb-1">24/7</div>
-              <div className="text-sm text-[#F0FFFD]/60">Support Available</div>
-            </div>
-            <div className="motion-metric">
-              <div className="text-3xl font-semibold text-[#18D6BD] mb-1">99.9%</div>
-              <div className="text-sm text-[#F0FFFD]/60">Uptime SLA</div>
-            </div>
+            {content.metrics.map((metric) => (
+              <div key={metric.label} className="motion-metric">
+                <div className="text-3xl font-semibold text-[#18D6BD] mb-1">{metric.value}</div>
+                <div className="text-sm text-[#F0FFFD]/60">{metric.label}</div>
+              </div>
+            ))}
           </MotionReveal>
         </div>
       </div>

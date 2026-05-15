@@ -1,46 +1,49 @@
 import type { Metadata } from 'next';
 
 import App from './App';
+import { getPublishedPage } from '@/lib/content/store';
+import { homeContentSchema } from '@/lib/content/schemas';
 
-export const metadata: Metadata = {
-  title: 'VolioTek | Secure Healthcare Operations Platform',
-  description:
-    'VolioTek helps regulated healthcare teams coordinate private workflows, security reviews, implementation planning, and operational accountability.',
-  alternates: {
-    canonical: '/',
-  },
-  keywords: [
-    'healthcare operations platform',
-    'secure healthcare software',
-    'regulated healthcare workflows',
-    'HIPAA operations software',
-    'healthcare workflow coordination',
-    'VolioTek',
-  ],
-  openGraph: {
-    title: 'VolioTek | Secure Healthcare Operations Platform',
-    description:
-      'Secure healthcare operations software for regulated teams that need private workflows, implementation discipline, and operational accountability.',
-    url: '/',
-    siteName: 'VolioTek',
-    images: [
-      {
-        url: '/brand/banner-light.png',
-        width: 1672,
-        height: 941,
-        alt: 'VolioTek secure healthcare operations platform',
-      },
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPublishedPage('home');
+
+  return {
+    title: page.metadata.title,
+    description: page.metadata.description,
+    alternates: {
+      canonical: page.metadata.canonical,
+    },
+    keywords: [
+      'healthcare operations platform',
+      'secure healthcare software',
+      'regulated healthcare workflows',
+      'HIPAA operations software',
+      'healthcare workflow coordination',
+      'VolioTek',
     ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'VolioTek | Secure Healthcare Operations Platform',
-    description:
-      'Secure healthcare operations software for regulated teams that need private workflows and operational accountability.',
-    images: ['/brand/banner-light.png'],
-  },
-};
+    openGraph: {
+      title: page.metadata.title,
+      description: page.metadata.description,
+      url: page.metadata.canonical,
+      siteName: 'VolioTek',
+      images: [
+        {
+          url: '/brand/banner-light.png',
+          width: 1672,
+          height: 941,
+          alt: 'VolioTek secure healthcare operations platform',
+        },
+      ],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: page.metadata.title,
+      description: page.metadata.description,
+      images: ['/brand/banner-light.png'],
+    },
+  };
+}
 
 const jsonLd = [
   {
@@ -90,10 +93,13 @@ const jsonLd = [
   },
 ];
 
-export default function Page() {
+export default async function Page() {
+  const page = await getPublishedPage('home');
+  const content = homeContentSchema.parse(page.content);
+
   return (
     <>
-      <App />
+      <App content={content} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

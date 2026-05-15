@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -14,50 +13,18 @@ import {
   UsersRound,
 } from 'lucide-react';
 
+import { buildManagedMetadata } from '@/lib/content/metadata';
+import { getPublishedPage } from '@/lib/content/store';
+import { genericPageContentSchema } from '@/lib/content/schemas';
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
+import { ManagedContentSections } from '../components/ManagedContentSections';
 import { MotionReveal } from '../components/MotionReveal';
 import { SecurityMesh } from '../components/SecurityMesh';
 
-export const metadata: Metadata = {
-  title: 'Documentation | VolioTek Healthcare Operations Platform',
-  description:
-    'Explore VolioTek documentation for product evaluation, implementation planning, access control, workflow setup, and healthcare security review.',
-  alternates: {
-    canonical: '/documentation',
-  },
-  keywords: [
-    'VolioTek documentation',
-    'healthcare operations documentation',
-    'HIPAA software implementation',
-    'healthcare workflow platform',
-    'regulated healthcare operations',
-    'healthcare access control',
-  ],
-  openGraph: {
-    title: 'VolioTek Documentation',
-    description:
-      'Implementation-oriented documentation for evaluating and adopting VolioTek in regulated healthcare operations.',
-    url: '/documentation',
-    siteName: 'VolioTek',
-    images: [
-      {
-        url: '/brand/banner-light.png',
-        width: 1672,
-        height: 941,
-        alt: 'VolioTek documentation',
-      },
-    ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'VolioTek Documentation',
-    description:
-      'Guidance for evaluating, configuring, and operating VolioTek in healthcare environments.',
-    images: ['/brand/banner-light.png'],
-  },
-};
+export function generateMetadata() {
+  return buildManagedMetadata('documentation', 'VolioTek documentation');
+}
 
 const docSections = [
   {
@@ -168,7 +135,10 @@ const jsonLd = {
   ],
 };
 
-export default function DocumentationPage() {
+export default async function DocumentationPage() {
+  const page = await getPublishedPage('documentation');
+  const content = genericPageContentSchema.parse(page.content);
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -191,7 +161,7 @@ export default function DocumentationPage() {
                   delay={90}
                   className="mt-8 max-w-4xl text-5xl font-semibold leading-tight text-[#F0FFFD] lg:text-6xl xl:text-7xl"
                 >
-                  Practical guidance for evaluating and <span className="text-[#18D6BD]">adopting VolioTek.</span>
+                  {content.headline}
                 </MotionReveal>
 
                 <MotionReveal
@@ -200,7 +170,7 @@ export default function DocumentationPage() {
                   delay={180}
                   className="mt-6 max-w-2xl text-xl leading-relaxed text-[#F0FFFD]/70 lg:text-2xl"
                 >
-                  Use these resources to prepare workflow scope, review questions, access models, and implementation details before a product conversation.
+                  {content.description}
                 </MotionReveal>
               </div>
 
@@ -229,6 +199,8 @@ export default function DocumentationPage() {
             </div>
           </div>
         </section>
+
+        <ManagedContentSections content={content} fallbackTitle="Current documentation details" fallbackDescription="These sections are managed from the admin panel and published separately from drafts." />
 
         <section className="section-ambient section-ambient--light relative overflow-hidden bg-white py-24 lg:py-32">
           <div className="relative max-w-7xl mx-auto px-6 lg:px-12">

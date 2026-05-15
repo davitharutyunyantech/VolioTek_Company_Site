@@ -1,41 +1,15 @@
-import type { Metadata } from 'next';
 import { ArrowRight, BadgeCheck, ClipboardList, LockKeyhole, ShieldCheck } from 'lucide-react';
 
+import { buildManagedMetadata } from '@/lib/content/metadata';
+import { getPublishedPage } from '@/lib/content/store';
+import { genericPageContentSchema } from '@/lib/content/schemas';
 import { DetailList, FinalCta, HeroPanel, PageHero, PublicPageShell, SplitSection } from '../components/PublicPageBlocks';
 
 const lastUpdated = 'May 15, 2026';
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy | VolioTek',
-  description:
-    'Read the VolioTek Privacy Policy for website information collection, data use, service providers, retention, security, and privacy contact details.',
-  alternates: {
-    canonical: '/privacy-policy',
-  },
-  openGraph: {
-    title: 'Privacy Policy | VolioTek',
-    description:
-      'VolioTek privacy information covering website inquiries, contact details, analytics, vendors, retention, security, and privacy requests.',
-    url: '/privacy-policy',
-    siteName: 'VolioTek',
-    images: [
-      {
-        url: '/brand/banner-light.png',
-        width: 1672,
-        height: 941,
-        alt: 'VolioTek brand banner',
-      },
-    ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Privacy Policy | VolioTek',
-    description:
-      'Privacy practices for the VolioTek website, business inquiries, service providers, and privacy requests.',
-    images: ['/brand/banner-light.png'],
-  },
-};
+export function generateMetadata() {
+  return buildManagedMetadata('privacy-policy');
+}
 
 const privacySections = [
   {
@@ -81,14 +55,18 @@ const jsonLd = {
   },
 };
 
-export default function PrivacyPolicyPage() {
+export default async function PrivacyPolicyPage() {
+  const page = await getPublishedPage('privacy-policy');
+  const content = genericPageContentSchema.parse(page.content);
+  const managedSections = content.sections.length > 0 ? content.sections : privacySections;
+
   return (
     <PublicPageShell jsonLd={jsonLd}>
       <PageHero
         eyebrow="Privacy Policy"
         EyebrowIcon={ShieldCheck}
-        title={<>How VolioTek handles <span className="text-[#18D6BD]">website information.</span></>}
-        description="This policy explains what information may be collected through this website, how it is used, and how to contact us about privacy requests."
+        title={content.headline}
+        description={content.description}
         gridClassName="lg:grid-cols-[1.02fr_0.98fr]"
       >
         <HeroPanel
@@ -105,7 +83,7 @@ export default function PrivacyPolicyPage() {
         className="section-ambient--soft bg-[#EDFAFA]"
         columns="lg:grid-cols-[0.85fr_1.15fr]"
       >
-        <DetailList items={privacySections} Icon={LockKeyhole} />
+        <DetailList items={managedSections} Icon={LockKeyhole} />
       </SplitSection>
 
       <FinalCta

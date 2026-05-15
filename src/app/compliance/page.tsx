@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import {
   ArrowRight,
   BadgeCheck,
@@ -14,6 +13,10 @@ import {
   UsersRound,
 } from 'lucide-react';
 
+import { buildManagedMetadata } from '@/lib/content/metadata';
+import { getPublishedPage } from '@/lib/content/store';
+import { genericPageContentSchema } from '@/lib/content/schemas';
+import { ManagedContentSections } from '../components/ManagedContentSections';
 import { DetailList, FinalCta, HeroPanel, IconCardGrid, PageHero, PublicPageShell, SectionIntro, SplitSection } from '../components/PublicPageBlocks';
 import { MotionReveal } from '../components/MotionReveal';
 
@@ -107,44 +110,9 @@ const faqs = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: 'Compliance Review | VolioTek',
-  description:
-    'Review VolioTek compliance support for regulated healthcare workflows, including BAA readiness, security safeguards, auditability, and review documentation.',
-  keywords: [
-    'VolioTek compliance',
-    'healthcare compliance software',
-    'HIPAA BAA',
-    'healthcare security review',
-    'regulated healthcare workflows',
-  ],
-  alternates: {
-    canonical: '/compliance',
-  },
-  openGraph: {
-    title: 'Compliance Review | VolioTek',
-    description:
-      'Compliance and security review information for healthcare teams evaluating VolioTek for regulated workflows.',
-    url: '/compliance',
-    siteName: 'VolioTek',
-    images: [
-      {
-        url: '/brand/banner-light.png',
-        width: 1672,
-        height: 941,
-        alt: 'VolioTek brand banner',
-      },
-    ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Compliance Review | VolioTek',
-    description:
-      'BAA readiness, review materials, safeguards, and shared-responsibility context for regulated healthcare teams.',
-    images: ['/brand/banner-light.png'],
-  },
-};
+export function generateMetadata() {
+  return buildManagedMetadata('compliance');
+}
 
 const jsonLd = [
   {
@@ -193,14 +161,17 @@ const jsonLd = [
   },
 ];
 
-export default function CompliancePage() {
+export default async function CompliancePage() {
+  const page = await getPublishedPage('compliance');
+  const content = genericPageContentSchema.parse(page.content);
+
   return (
     <PublicPageShell jsonLd={jsonLd}>
       <PageHero
         eyebrow="Compliance Review"
         EyebrowIcon={BadgeCheck}
-        title={<>Compliance support for regulated <span className="text-[#18D6BD]">healthcare workflows.</span></>}
-        description="VolioTek helps healthcare teams evaluate platform safeguards, BAA readiness, access controls, and review documentation before sensitive workflows move into production."
+        title={content.headline}
+        description={content.description}
       >
         <HeroPanel
           icon={ShieldCheck}
@@ -209,6 +180,8 @@ export default function CompliancePage() {
           action={{ href: 'mailto:contact@voliotek.com?subject=VolioTek%20compliance%20review', label: 'Request compliance review', icon: ArrowRight }}
         />
       </PageHero>
+
+      <ManagedContentSections content={content} fallbackTitle="Current compliance details" fallbackDescription="These sections are managed from the admin panel and published separately from drafts." />
 
       <section className="section-ambient section-ambient--light relative overflow-hidden bg-white py-24 lg:py-32">
         <div className="relative max-w-7xl mx-auto px-6 lg:px-12">

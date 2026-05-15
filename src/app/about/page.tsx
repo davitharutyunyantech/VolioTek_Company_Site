@@ -1,39 +1,14 @@
-import type { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, FileText, LockKeyhole, ShieldCheck, Users } from 'lucide-react';
 
+import { buildManagedMetadata } from '@/lib/content/metadata';
+import { getPublishedPage } from '@/lib/content/store';
+import { genericPageContentSchema } from '@/lib/content/schemas';
+import { ManagedContentSections } from '../components/ManagedContentSections';
 import { Checklist, FinalCta, IconCardGrid, PageHero, PublicPageShell, SectionIntro, SplitSection } from '../components/PublicPageBlocks';
 
-export const metadata: Metadata = {
-  title: 'About VolioTek | Healthcare Operations Software Company',
-  description:
-    'Learn about VolioTek, the company building secure healthcare operations software for teams that need privacy, accountability, and reliable execution.',
-  alternates: {
-    canonical: '/about',
-  },
-  openGraph: {
-    title: 'About VolioTek',
-    description:
-      'VolioTek builds secure healthcare operations software with a focus on privacy, accountability, and dependable implementation.',
-    url: '/about',
-    siteName: 'VolioTek',
-    images: [
-      {
-        url: '/brand/banner-light.png',
-        width: 1672,
-        height: 941,
-        alt: 'VolioTek brand banner',
-      },
-    ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'About VolioTek',
-    description:
-      'The company behind secure healthcare operations software for privacy-conscious teams.',
-    images: ['/brand/banner-light.png'],
-  },
-};
+export function generateMetadata() {
+  return buildManagedMetadata('about');
+}
 
 const principles = [
   {
@@ -87,16 +62,21 @@ const jsonLd = {
   },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const page = await getPublishedPage('about');
+  const content = genericPageContentSchema.parse(page.content);
+
   return (
     <PublicPageShell jsonLd={jsonLd}>
       <PageHero
         eyebrow="About VolioTek"
         EyebrowIcon={LockKeyhole}
-        title={<>We build healthcare software for organizations that cannot treat trust as <span className="text-[#18D6BD]">an afterthought.</span></>}
-        description="VolioTek is a product company focused on disciplined operations, protected information, and the practical realities of regulated healthcare work."
+        title={content.headline}
+        description={content.description}
         overlayClassName="from-transparent via-[#071625]/40 to-[#071625]"
       />
+
+      <ManagedContentSections content={content} fallbackTitle="Current company details" fallbackDescription="These sections are managed from the admin panel and published separately from drafts." />
 
       <SplitSection
         title="Why we exist"

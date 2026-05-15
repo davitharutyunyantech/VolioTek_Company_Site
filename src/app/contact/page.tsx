@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import {
   ArrowRight,
   CalendarClock,
@@ -10,39 +9,15 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 
+import { buildManagedMetadata } from '@/lib/content/metadata';
+import { getPublishedPage } from '@/lib/content/store';
+import { genericPageContentSchema } from '@/lib/content/schemas';
+import { ManagedContentSections } from '../components/ManagedContentSections';
 import { Checklist, FinalCta, HeroPanel, IconCardGrid, PageHero, PublicPageShell, SectionIntro, SplitSection } from '../components/PublicPageBlocks';
 
-export const metadata: Metadata = {
-  title: 'Contact VolioTek | Healthcare Operations Software Demo',
-  description:
-    'Contact VolioTek to discuss secure healthcare operations software, implementation fit, privacy requirements, and demo scheduling for regulated teams.',
-  alternates: {
-    canonical: '/contact',
-  },
-  openGraph: {
-    title: 'Contact VolioTek',
-    description:
-      'Reach VolioTek for healthcare operations software demos, implementation questions, and security-focused product discussions.',
-    url: '/contact',
-    siteName: 'VolioTek',
-    images: [
-      {
-        url: '/brand/banner-light.png',
-        width: 1672,
-        height: 941,
-        alt: 'VolioTek brand banner',
-      },
-    ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Contact VolioTek',
-    description:
-      'Start a product conversation with VolioTek about healthcare operations, privacy requirements, and implementation fit.',
-    images: ['/brand/banner-light.png'],
-  },
-};
+export function generateMetadata() {
+  return buildManagedMetadata('contact');
+}
 
 const contactChannels = [
   {
@@ -99,14 +74,17 @@ const jsonLd = {
   },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const page = await getPublishedPage('contact');
+  const content = genericPageContentSchema.parse(page.content);
+
   return (
     <PublicPageShell jsonLd={jsonLd}>
       <PageHero
         eyebrow="Contact VolioTek"
         EyebrowIcon={MessageSquareText}
-        title={<>Start the right product conversation before <span className="text-[#18D6BD]">the demo.</span></>}
-        description="Tell us what your team is trying to coordinate, what needs to stay protected, and where VolioTek should fit into your operating model."
+        title={content.headline}
+        description={content.description}
       >
         <HeroPanel
           icon={CalendarClock}
@@ -115,6 +93,8 @@ export default function ContactPage() {
           action={{ href: 'mailto:contact@voliotek.com?subject=VolioTek%20demo%20request', label: 'Request a conversation', icon: ArrowRight }}
         />
       </PageHero>
+
+      <ManagedContentSections content={content} fallbackTitle="Current contact details" fallbackDescription="These sections are managed from the admin panel and published separately from drafts." />
 
       <section className="section-ambient section-ambient--light relative overflow-hidden bg-white py-24 lg:py-32">
         <div className="relative max-w-7xl mx-auto px-6 lg:px-12">

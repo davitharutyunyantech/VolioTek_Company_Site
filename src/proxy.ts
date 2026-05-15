@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export function proxy(request: NextRequest) {
   const isDev = process.env.NODE_ENV === 'development';
+  const { pathname } = request.nextUrl;
+
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+    const hasSessionCookie = Boolean(request.cookies.get('voliotek_admin_session')?.value);
+
+    if (!hasSessionCookie) {
+      return NextResponse.redirect(new URL('/admin/login', request.url));
+    }
+  }
 
   const cspHeader = [
     "default-src 'self'",

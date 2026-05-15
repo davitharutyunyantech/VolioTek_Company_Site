@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum PageStatus {
+  DRAFT
+  PUBLISHED
+  UNPUBLISHED
+  ARCHIVED
+}
+
+enum AuditAction {
+  LOGIN
+  LOGIN_FAILED
+  DRAFT_SAVE
+  PUBLISH
+  UNPUBLISH
+  ARCHIVE
+  VALIDATION_FAILED
+}
+
+model AdminUser {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  name         String?
+  passwordHash String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  auditEvents  AuditEvent[]
+}
+
+model SitePage {
+  id                  String         @id @default(cuid())
+  slug                String         @unique
+  title               String
+  status              PageStatus     @default(DRAFT)
+  draftRevisionId     String?        @unique
+  publishedRevisionId String?        @unique
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  revisions           PageRevision[]
+  draftRevision       PageRevision?  @relation("DraftRevision", fields: [draftRevisionId], references: [id])
+  publishedRevision   PageRevision?  @relation("PublishedRevision", fields: [publishedRevisionId], references: [id])
+  auditEvents         AuditEvent[]
+}
+
+model PageRevision {
+  id            String    @id @default(cuid())
+  pageId        String
+  version       Int
+  metadata      Json
+  content       Json
+  createdAt     DateTime  @default(now())
+  createdById   String?
+  page          SitePage  @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  draftFor      SitePage? @relation("DraftRevision")
+  publishedFor  SitePage? @relation("PublishedRevision")
+
+  @@unique([pageId, version])
+  @@index([pageId, createdAt])
+}
+
+model AuditEvent {
+  id        String      @id @default(cuid())
+  action    AuditAction
+  pageId    String?
+  userId    String?
+  detail    Json?
+  ipAddress String?
+  createdAt DateTime    @default(now())
+  page      SitePage?   @relation(fields: [pageId], references: [id], onDelete: SetNull)
+  user      AdminUser?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([pageId])
+  @@index([userId])
+}

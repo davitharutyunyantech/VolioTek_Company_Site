@@ -21,6 +21,9 @@ dist/
 
 # system files
 .DS_Store
+*.swp
+*.swo
+*~
 
 # logs
 npm-debug.log*

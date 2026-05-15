@@ -1,39 +1,13 @@
-import type { Metadata } from 'next';
 import { ArrowRight, ClipboardCheck, FileText, LockKeyhole, ShieldCheck } from 'lucide-react';
 
+import { buildManagedMetadata } from '@/lib/content/metadata';
+import { getPublishedPage } from '@/lib/content/store';
+import { genericPageContentSchema } from '@/lib/content/schemas';
 import { DetailList, FinalCta, HeroPanel, PageHero, PublicPageShell, SplitSection } from '../components/PublicPageBlocks';
 
-export const metadata: Metadata = {
-  title: 'Business Associate Agreement | VolioTek',
-  description:
-    'VolioTek signs Business Associate Agreements with eligible healthcare customers before the platform is used to process Protected Health Information.',
-  alternates: {
-    canonical: '/business-associate-agreement',
-  },
-  openGraph: {
-    title: 'Business Associate Agreement | VolioTek',
-    description:
-      'Information about requesting a Business Associate Agreement for eligible healthcare use of VolioTek.',
-    url: '/business-associate-agreement',
-    siteName: 'VolioTek',
-    images: [
-      {
-        url: '/brand/banner-light.png',
-        width: 1672,
-        height: 941,
-        alt: 'VolioTek brand banner',
-      },
-    ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Business Associate Agreement | VolioTek',
-    description:
-      'Request a Business Associate Agreement before using VolioTek to create, receive, maintain, or transmit PHI.',
-    images: ['/brand/banner-light.png'],
-  },
-};
+export function generateMetadata() {
+  return buildManagedMetadata('business-associate-agreement');
+}
 
 const baaDetails = [
   {
@@ -68,14 +42,18 @@ const jsonLd = {
   },
 };
 
-export default function BusinessAssociateAgreementPage() {
+export default async function BusinessAssociateAgreementPage() {
+  const page = await getPublishedPage('business-associate-agreement');
+  const content = genericPageContentSchema.parse(page.content);
+  const managedSections = content.sections.length > 0 ? content.sections : baaDetails;
+
   return (
     <PublicPageShell jsonLd={jsonLd}>
       <PageHero
         eyebrow="Business Associate Agreement"
         EyebrowIcon={FileText}
-        title={<>BAA support for healthcare workflows <span className="text-[#18D6BD]">involving PHI.</span></>}
-        description="VolioTek signs Business Associate Agreements with eligible healthcare customers before the product is used to create, receive, maintain, or transmit Protected Health Information."
+        title={content.headline}
+        description={content.description}
       >
         <HeroPanel
           icon={ShieldCheck}
@@ -91,7 +69,7 @@ export default function BusinessAssociateAgreementPage() {
         className="section-ambient--soft bg-[#EDFAFA]"
         columns="lg:grid-cols-[0.85fr_1.15fr]"
       >
-        <DetailList items={baaDetails} Icon={LockKeyhole} />
+        <DetailList items={managedSections} Icon={LockKeyhole} />
       </SplitSection>
 
       <FinalCta

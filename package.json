@@ -3,18 +3,31 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "seed:admin": "tsx scripts/seed-admin.ts",
+    "seed:content": "tsx scripts/seed-content.ts",
+    "sync:content-defaults": "tsx scripts/sync-content-defaults.ts",
     "start": "next start",
-    "test": "tsx --test"
+    "test": "tsx --test src/lib/content/schemas.test.ts src/lib/server/auth.test.ts"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "lucide-react": "0.544.0",
     "next": "16.2.6",
+    "pg": "8.18.0",
+    "prisma": "^7.8.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "zod": "4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.2.1",
@@ -29,6 +42,7 @@
     "typescript": "5.9.3"
   },
   "overrides": {
+    "@hono/node-server": "1.19.13",
     "postcss": "8.5.10"
   }
 }
