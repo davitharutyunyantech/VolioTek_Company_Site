@@ -134,7 +134,6 @@ export function Header() {
     { label: 'Security', href: '/#security' },
     { label: 'Documentation', href: '/documentation' },
     { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' },
   ];
 
   return (
