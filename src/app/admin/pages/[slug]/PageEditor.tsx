@@ -87,6 +87,10 @@ function normalizeGenericContent(content: unknown): GenericPageContent {
   };
 }
 
+function stringifyDraft(value: unknown) {
+  return JSON.stringify(value);
+}
+
 function ActionFields({
   idPrefix,
   title,
@@ -129,11 +133,42 @@ export function PageEditor({ page }: { page: EditablePage }) {
   const [homeContent, setHomeContent] = useState(page.content as HomeContent);
   const [genericContent, setGenericContent] = useState(() => normalizeGenericContent(page.content));
   const [contentJson, setContentJson] = useState(JSON.stringify(page.content, null, 2));
+  const [savedDraftSnapshot, setSavedDraftSnapshot] = useState(() =>
+    stringifyDraft({
+      metadata: { title: page.metadata.title, description: page.metadata.description, canonical: page.metadata.canonical },
+      content: isHome ? page.content : normalizeGenericContent(page.content),
+    }),
+  );
+  const [hasPublishableDraft, setHasPublishableDraft] = useState(() => page.draftVersion !== page.publishedVersion);
+  const [isPublished, setIsPublished] = useState(() => page.status === 'PUBLISHED');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [isWorking, setIsWorking] = useState(false);
 
   const isGeneric = !isHome && typeof genericContent?.headline === 'string' && Array.isArray(genericContent.sections);
+
+  const currentDraftSnapshot = useMemo(() => {
+    let content: unknown;
+
+    if (isHome) {
+      content = homeContent;
+    } else if (isGeneric) {
+      content = genericContent;
+    } else {
+      try {
+        content = JSON.parse(contentJson);
+      } catch {
+        content = { invalidJson: contentJson };
+      }
+    }
+
+    return stringifyDraft({
+      metadata: { title, description, canonical },
+      content,
+    });
+  }, [canonical, contentJson, description, genericContent, homeContent, isGeneric, isHome, title]);
+
+  const hasDraftChanges = currentDraftSnapshot !== savedDraftSnapshot;
 
   const contentError = useMemo(() => {
     if (isHome || isGeneric) {
@@ -288,6 +323,8 @@ export function PageEditor({ page }: { page: EditablePage }) {
     });
 
     if (ok) {
+      setSavedDraftSnapshot(currentDraftSnapshot);
+      setHasPublishableDraft(true);
       setMessage('Draft saved.');
     }
   }
@@ -296,7 +333,18 @@ export function PageEditor({ page }: { page: EditablePage }) {
     const ok = await request(`/api/admin/pages/${page.slug}/${name}`, { method: 'POST', headers: adminMutationHeaders() });
 
     if (ok) {
-      setMessage(`${name[0].toUpperCase()}${name.slice(1)} complete.`);
+      if (name === 'publish' || name === 'restore') {
+        setHasPublishableDraft(false);
+        setIsPublished(true);
+      }
+      if (name === 'unpublish') {
+        setHasPublishableDraft(true);
+        setIsPublished(false);
+      }
+      if (name === 'archive') {
+        setIsPublished(false);
+      }
+      setMessage(name === 'restore' ? 'Page restored and published.' : `${name[0].toUpperCase()}${name.slice(1)} complete.`);
     }
   }
 
@@ -403,22 +451,22 @@ export function PageEditor({ page }: { page: EditablePage }) {
         {error ? <p className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
         {message ? <p className="mb-4 rounded-lg bg-[#EDFAFA] px-4 py-3 text-sm text-[#071625]">{message}</p> : null}
         <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={saveDraft} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg bg-[#18D6BD] px-5 py-3 font-semibold text-[#071625] transition hover:bg-[#35EAD0] disabled:opacity-60">
+          <button type="button" onClick={saveDraft} disabled={isWorking || !hasDraftChanges} className="inline-flex items-center gap-2 rounded-lg bg-[#18D6BD] px-5 py-3 font-semibold text-[#071625] transition hover:bg-[#35EAD0] disabled:cursor-not-allowed disabled:opacity-60">
             <Save className="h-4 w-4" />
             Save draft
           </button>
           {isArchived ? (
             <button type="button" onClick={() => action('restore')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg bg-[#071625] px-5 py-3 font-semibold text-[#F0FFFD] transition hover:bg-[#0B2233] disabled:opacity-60">
               <RotateCcw className="h-4 w-4" />
-              Restore
+              Restore & publish
             </button>
           ) : (
             <>
-              <button type="button" onClick={() => action('publish')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg bg-[#071625] px-5 py-3 font-semibold text-[#F0FFFD] transition hover:bg-[#0B2233] disabled:opacity-60">
+              <button type="button" onClick={() => action('publish')} disabled={isWorking || !hasPublishableDraft} className="inline-flex items-center gap-2 rounded-lg bg-[#071625] px-5 py-3 font-semibold text-[#F0FFFD] transition hover:bg-[#0B2233] disabled:cursor-not-allowed disabled:opacity-60">
                 <UploadCloud className="h-4 w-4" />
                 Publish
               </button>
-              <button type="button" onClick={() => action('unpublish')} disabled={isWorking} className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-5 py-3 font-semibold transition hover:border-[#18D6BD] disabled:opacity-60">
+              <button type="button" onClick={() => action('unpublish')} disabled={isWorking || !isPublished} className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-5 py-3 font-semibold transition hover:border-[#18D6BD] disabled:cursor-not-allowed disabled:opacity-60">
                 <EyeOff className="h-4 w-4" />
                 Unpublish
               </button>

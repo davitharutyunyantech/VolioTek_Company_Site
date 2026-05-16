@@ -307,12 +307,29 @@ export async function restorePage(slug: PageSlug, userId: string) {
     throw new Error('DATABASE_URL is required to restore content.');
   }
 
-  const page = await prisma.sitePage.update({
+  const page = await prisma.sitePage.findUnique({
     where: { slug },
-    data: { status: 'UNPUBLISHED' },
+    include: { draftRevision: true },
+  });
+
+  if (!page?.draftRevision) {
+    throw new Error('Draft revision not found.');
+  }
+
+  await prisma.sitePage.update({
+    where: { id: page.id },
+    data: {
+      status: 'PUBLISHED',
+      publishedRevisionId: page.draftRevision.id,
+    },
   });
 
   await prisma.auditEvent.create({
-    data: { action: 'RESTORE', pageId: page.id, userId },
+    data: {
+      action: 'RESTORE',
+      pageId: page.id,
+      userId,
+      detail: toJson({ version: page.draftRevision.version, status: 'PUBLISHED' }),
+    },
   });
 }
