@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import {
   ArrowRight,
   CalendarClock,
@@ -13,6 +14,7 @@ import {
 import { buildManagedMetadata } from '@/lib/content/metadata';
 import { getPublishedPage } from '@/lib/content/store';
 import { genericPageContentSchema } from '@/lib/content/schemas';
+import { InquiryForm } from '../components/InquiryForm';
 import { ManagedContentSections } from '../components/ManagedContentSections';
 import { Checklist, FinalCta, HeroPanel, HighlightedText, IconCardGrid, PageHero, PublicPageShell, SectionIntro, SplitSection } from '../components/PublicPageBlocks';
 
@@ -98,12 +100,35 @@ export default async function ContactPage() {
         <HeroPanel
           icon={CalendarClock}
           title="What happens next"
-          description="A product conversation usually starts with workflow scope, stakeholder needs, and review constraints. From there, we can schedule a focused demo or technical discussion."
-          action={{ href: 'mailto:contact@voliotek.com?subject=VolioTek%20demo%20request', label: 'Request a conversation', icon: ArrowRight }}
+          description="General messages are routed to the right team. If you are evaluating the product, use the demo request flow so we can prepare the first conversation."
+          action={{ href: '/request-demo', label: 'Request a demo', icon: ArrowRight }}
         />
       </PageHero>
 
       <ManagedContentSections content={content} fallbackTitle="Current contact details" fallbackDescription="These sections are managed from the admin panel and published separately from drafts." />
+
+      <section className="section-ambient section-ambient--light relative overflow-hidden bg-white py-20 lg:py-28">
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[0.88fr_1.12fr] lg:items-start lg:px-12">
+          <div className="lg:sticky lg:top-28">
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-[#07988D]">Contact us</p>
+            <h2 className="mt-3 text-4xl font-semibold text-[#071625] lg:text-5xl">
+              Send the right note to the right team.
+            </h2>
+            <p className="mt-5 text-lg leading-relaxed text-gray-600">
+              Use this form for general inquiries, partnerships, privacy questions, and review requests. Product evaluations should go through the demo request flow.
+            </p>
+            <Link
+              href="/request-demo"
+              className="mt-7 inline-flex items-center rounded-lg border border-[#18D6BD]/40 px-5 py-3 font-semibold text-[#071625] transition hover:border-[#18D6BD] hover:bg-[#EDFAFA]"
+            >
+              Looking for a product demo?
+              <ArrowRight className="ml-2 h-5 w-5 text-[#07988D]" />
+            </Link>
+          </div>
+
+          <InquiryForm mode="contact" source="contact_page" />
+        </div>
+      </section>
 
       <section className="section-ambient section-ambient--light relative overflow-hidden bg-white py-24 lg:py-32">
         <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
@@ -125,10 +150,10 @@ export default async function ContactPage() {
 
       <FinalCta
         title={<>Reach the VolioTek <span className="text-[#18D6BD]">team directly.</span></>}
-        description="Use email for product, implementation, or review questions. We will route the conversation based on the context you provide."
+        description="Use the contact form for general questions or request a demo when your team is ready for a focused product conversation."
         primaryAction={{
-          href: 'mailto:contact@voliotek.com?subject=VolioTek%20contact',
-          label: 'contact@voliotek.com',
+          href: '/request-demo',
+          label: 'Request Demo',
           icon: ArrowRight,
         }}
         secondarySlot={(

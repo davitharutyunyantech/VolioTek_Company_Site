@@ -54,7 +54,8 @@ export const ModelName = {
   AdminUser: 'AdminUser',
   SitePage: 'SitePage',
   PageRevision: 'PageRevision',
-  AuditEvent: 'AuditEvent'
+  AuditEvent: 'AuditEvent',
+  Inquiry: 'Inquiry'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -123,6 +124,27 @@ export const AuditEventScalarFieldEnum = {
 } as const
 
 export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
+
+
+export const InquiryScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  status: 'status',
+  name: 'name',
+  email: 'email',
+  company: 'company',
+  role: 'role',
+  subject: 'subject',
+  message: 'message',
+  interest: 'interest',
+  preferredContactTime: 'preferredContactTime',
+  source: 'source',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InquiryScalarFieldEnum = (typeof InquiryScalarFieldEnum)[keyof typeof InquiryScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -109,7 +109,7 @@ export default async function AboutPage() {
       <FinalCta
         title={<>Work with a team that treats implementation as part of <span className="text-[#18D6BD]">the product.</span></>}
         description="Talk with us about your operating model, security requirements, and what your team needs to coordinate with confidence."
-        primaryAction={{ href: '/#demo', label: 'Request Demo', icon: ArrowRight }}
+        primaryAction={{ href: '/request-demo', label: 'Request Demo', icon: ArrowRight }}
         secondaryAction={{ href: '/contact', label: 'Contact Us', variant: 'secondary' }}
       />
     </PublicPageShell>

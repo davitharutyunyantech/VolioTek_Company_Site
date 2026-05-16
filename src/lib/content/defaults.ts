@@ -14,7 +14,7 @@ export const defaultHomeContent: HomeContent = {
     highlightedTitle: 'healthcare teams',
     description:
       'VolioTek is the product we created for healthcare organizations that need private workflows, precise coordination, and regulatory confidence in one trusted system.',
-    primaryAction: { label: 'Request Demo', href: '#demo' },
+    primaryAction: { label: 'Request Demo', href: '/request-demo' },
     secondaryAction: { label: 'View Capabilities', href: '#capabilities' },
     metrics: [
       { value: '100%', label: 'HIPAA Compliant' },
@@ -178,7 +178,7 @@ export const defaultHomeContent: HomeContent = {
     highlightedTitle: 'in action?',
     description:
       'See how the platform supports regulated workflows, secure access, compliance visibility, and operational coordination for healthcare teams.',
-    primaryAction: { label: 'Request Demo', href: '/#demo' },
+    primaryAction: { label: 'Request Demo', href: '/request-demo' },
     secondaryAction: { label: 'Contact Us', href: '/contact' },
   },
 };
@@ -282,6 +282,38 @@ export const pageSeeds: PageSeed[] = [
           title: 'Helpful details to include',
           body:
             'Include which workflows need tighter coordination, current systems VolioTek should complement or replace, defined security and audit requirements, decision timeline, stakeholder group, and preferred demo format.',
+        },
+      ],
+    ),
+  },
+  {
+    slug: 'request-demo',
+    title: 'Request Demo',
+    metadata: {
+      title: 'Request a VolioTek Demo | Healthcare Operations Software',
+      description:
+        'Request a focused VolioTek demo for regulated healthcare operations, workflow coordination, security review, and implementation planning.',
+      canonical: '/request-demo',
+    },
+    content: genericContent(
+      'See VolioTek in the context of your team.',
+      'your team.',
+      'Tell us what your organization needs to coordinate, protect, or review. We will prepare a focused product conversation around that operating reality.',
+      [
+        {
+          title: 'What happens next',
+          body:
+            'We review your request, confirm the right discussion format, and follow up with scheduling details for a focused demo.',
+        },
+        {
+          title: 'Demo request',
+          body:
+            'Share the operating context your team wants to evaluate. We use it to prepare a practical product conversation instead of a generic walkthrough.',
+        },
+        {
+          title: 'Useful details for a better demo',
+          body:
+            'Include workflows to evaluate, current systems, security and audit requirements, decision timeline, stakeholder group, and preferred demo format.',
         },
       ],
     ),

@@ -25,6 +25,19 @@ enum AuditAction {
   VALIDATION_FAILED
 }
 
+enum InquiryType {
+  DEMO_REQUEST
+  CONTACT
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  SCHEDULED
+  CLOSED
+  SPAM
+}
+
 model AdminUser {
   id           String       @id @default(cuid())
   email        String       @unique
@@ -80,4 +93,27 @@ model AuditEvent {
   @@index([createdAt])
   @@index([pageId])
   @@index([userId])
+}
+
+model Inquiry {
+  id                   String        @id @default(cuid())
+  type                 InquiryType
+  status               InquiryStatus @default(NEW)
+  name                 String
+  email                String
+  company              String?
+  role                 String?
+  subject              String?
+  message              String?
+  interest             String?
+  preferredContactTime String?
+  source               String?
+  userAgent            String?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  @@index([createdAt])
+  @@index([status, createdAt])
+  @@index([type, createdAt])
+  @@index([email])
 }

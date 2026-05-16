@@ -25,6 +25,11 @@ const routes = [
     changeFrequency: 'monthly',
   },
   {
+    path: '/request-demo',
+    priority: 0.78,
+    changeFrequency: 'monthly',
+  },
+  {
     path: '/about',
     priority: 0.7,
     changeFrequency: 'monthly',

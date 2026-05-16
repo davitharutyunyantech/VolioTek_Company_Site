@@ -19,6 +19,8 @@
     "test": "tsx --test src/lib/content/schemas.test.ts src/lib/server/auth.test.ts"
   },
   "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "lucide-react": "0.544.0",

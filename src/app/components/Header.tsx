@@ -180,7 +180,7 @@ export function Header() {
               Contact Us
             </Link>
             <Link
-              href="/#demo"
+              href="/request-demo"
               className="premium-button inline-flex items-center justify-center px-6 py-2.5 bg-[#18D6BD] text-[#071625] rounded-lg hover:bg-[#35EAD0] transition-all duration-200 shadow-lg shadow-[#18D6BD]/20"
             >
               Request Demo
@@ -238,7 +238,7 @@ export function Header() {
               Contact Us
             </Link>
             <Link
-              href="/#demo"
+              href="/request-demo"
               className="premium-button block text-center px-6 py-2.5 bg-[#18D6BD] text-[#071625] rounded-lg"
               onClick={closeMobileMenu}
             >

@@ -31,3 +31,22 @@ export const AuditAction = {
 } as const
 
 export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]
+
+
+export const InquiryType = {
+  DEMO_REQUEST: 'DEMO_REQUEST',
+  CONTACT: 'CONTACT'
+} as const
+
+export type InquiryType = (typeof InquiryType)[keyof typeof InquiryType]
+
+
+export const InquiryStatus = {
+  NEW: 'NEW',
+  CONTACTED: 'CONTACTED',
+  SCHEDULED: 'SCHEDULED',
+  CLOSED: 'CLOSED',
+  SPAM: 'SPAM'
+} as const
+
+export type InquiryStatus = (typeof InquiryStatus)[keyof typeof InquiryStatus]

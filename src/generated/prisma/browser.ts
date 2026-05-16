@@ -37,3 +37,8 @@ export type PageRevision = Prisma.PageRevisionModel
  * 
  */
 export type AuditEvent = Prisma.AuditEventModel
+/**
+ * Model Inquiry
+ * 
+ */
+export type Inquiry = Prisma.InquiryModel
