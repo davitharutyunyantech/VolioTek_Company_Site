@@ -30,6 +30,35 @@ type DetailItem = {
   body: string;
 };
 
+export function HighlightedText({
+  text,
+  highlight,
+}: {
+  text: string;
+  highlight?: string;
+}) {
+  if (!highlight) {
+    return text;
+  }
+
+  const start = text.indexOf(highlight);
+
+  if (start === -1) {
+    return text;
+  }
+
+  const before = text.slice(0, start);
+  const after = text.slice(start + highlight.length);
+
+  return (
+    <>
+      {before}
+      <span className="text-[#18D6BD]">{highlight}</span>
+      {after}
+    </>
+  );
+}
+
 export function PublicPageShell({
   children,
   jsonLd,

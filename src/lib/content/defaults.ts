@@ -183,8 +183,14 @@ export const defaultHomeContent: HomeContent = {
   },
 };
 
-const genericContent = (headline: string, description: string, sections: GenericPageContent['sections'] = []): GenericPageContent => ({
+const genericContent = (
+  headline: string,
+  highlightedText: string,
+  description: string,
+  sections: GenericPageContent['sections'] = [],
+): GenericPageContent => ({
   headline,
+  highlightedText,
   description,
   sections,
 });
@@ -212,6 +218,7 @@ export const pageSeeds: PageSeed[] = [
     },
     content: genericContent(
       'We build healthcare software for organizations that cannot treat trust as an afterthought.',
+      'an afterthought.',
       'VolioTek is a product company focused on disciplined operations, protected information, and the practical realities of regulated healthcare work.',
       [
         {
@@ -248,6 +255,7 @@ export const pageSeeds: PageSeed[] = [
     },
     content: genericContent(
       'Start the right product conversation before the demo.',
+      'the demo.',
       'Tell us what your team is trying to coordinate, what needs to stay protected, and where VolioTek should fit into your operating model.',
       [
         {
@@ -289,6 +297,7 @@ export const pageSeeds: PageSeed[] = [
     },
     content: genericContent(
       'Practical guidance for evaluating and adopting VolioTek.',
+      'adopting VolioTek.',
       'Use these resources to prepare workflow scope, review questions, access models, and implementation details before a product conversation.',
       [
         {
@@ -330,6 +339,7 @@ export const pageSeeds: PageSeed[] = [
     },
     content: genericContent(
       'Compliance support for regulated healthcare workflows.',
+      'healthcare workflows.',
       'VolioTek helps healthcare teams evaluate platform safeguards, BAA readiness, access controls, and review documentation before sensitive workflows move into production.',
       [
         {
@@ -376,6 +386,7 @@ export const pageSeeds: PageSeed[] = [
     },
     content: genericContent(
       'How VolioTek handles website information.',
+      'website information.',
       'This policy explains what information may be collected through this website, how it is used, and how to contact us about privacy requests.',
       [
         {
@@ -417,6 +428,7 @@ export const pageSeeds: PageSeed[] = [
     },
     content: genericContent(
       'Terms for using the VolioTek website.',
+      'VolioTek website.',
       'These terms govern public website use. Separate signed agreements control paid products and customer environments.',
       [
         {
@@ -458,6 +470,7 @@ export const pageSeeds: PageSeed[] = [
     },
     content: genericContent(
       'BAA support for healthcare workflows involving PHI.',
+      'involving PHI.',
       'VolioTek signs Business Associate Agreements with eligible healthcare customers before the product is used to create, receive, maintain, or transmit Protected Health Information.',
       [
         {

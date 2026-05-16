@@ -4,7 +4,7 @@ import { ArrowRight, ClipboardCheck, FileText, LockKeyhole, ShieldCheck } from '
 import { buildManagedMetadata } from '@/lib/content/metadata';
 import { getPublishedPage } from '@/lib/content/store';
 import { genericPageContentSchema } from '@/lib/content/schemas';
-import { DetailList, FinalCta, HeroPanel, PageHero, PublicPageShell, SplitSection } from '../components/PublicPageBlocks';
+import { DetailList, FinalCta, HeroPanel, HighlightedText, PageHero, PublicPageShell, SplitSection } from '../components/PublicPageBlocks';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -61,7 +61,7 @@ export default async function BusinessAssociateAgreementPage() {
       <PageHero
         eyebrow="Business Associate Agreement"
         EyebrowIcon={FileText}
-        title={content.headline}
+        title={<HighlightedText text={content.headline} highlight={content.highlightedText} />}
         description={content.description}
       >
         <HeroPanel

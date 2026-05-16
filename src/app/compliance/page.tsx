@@ -18,7 +18,7 @@ import { buildManagedMetadata } from '@/lib/content/metadata';
 import { getPublishedPage } from '@/lib/content/store';
 import { genericPageContentSchema } from '@/lib/content/schemas';
 import { ManagedContentSections } from '../components/ManagedContentSections';
-import { DetailList, FinalCta, HeroPanel, IconCardGrid, PageHero, PublicPageShell, SectionIntro, SplitSection } from '../components/PublicPageBlocks';
+import { DetailList, FinalCta, HeroPanel, HighlightedText, IconCardGrid, PageHero, PublicPageShell, SectionIntro, SplitSection } from '../components/PublicPageBlocks';
 import { MotionReveal } from '../components/MotionReveal';
 
 export const dynamic = 'force-dynamic';
@@ -179,7 +179,7 @@ export default async function CompliancePage() {
       <PageHero
         eyebrow="Compliance Review"
         EyebrowIcon={BadgeCheck}
-        title={content.headline}
+        title={<HighlightedText text={content.headline} highlight={content.highlightedText} />}
         description={content.description}
       >
         <HeroPanel

@@ -3,6 +3,7 @@ import { getPrisma } from '../src/lib/server/prisma';
 
 type GenericContent = {
   headline?: string;
+  highlightedText?: string;
   description?: string;
   sections?: unknown[];
 };
@@ -26,6 +27,20 @@ function toJson(value: unknown) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function shouldBackfillHighlightedText(currentContent: unknown, seedContent: unknown) {
+  const current = currentContent as GenericContent;
+  const seed = seedContent as GenericContent;
+
+  return (
+    typeof current.headline === 'string' &&
+    typeof seed.headline === 'string' &&
+    current.headline === seed.headline &&
+    !current.highlightedText &&
+    typeof seed.highlightedText === 'string' &&
+    seed.highlightedText.length > 0
+  );
+}
+
 async function main() {
   const prisma = getPrisma();
 
@@ -47,17 +62,31 @@ async function main() {
 
     const currentRevision = page?.draftRevision ?? page?.publishedRevision;
 
-    if (!page || !currentRevision || !isEmptyOrPlaceholderContent(currentRevision.content, seed.content)) {
+    if (!page || !currentRevision) {
+      continue;
+    }
+
+    const shouldReplacePlaceholder = isEmptyOrPlaceholderContent(currentRevision.content, seed.content);
+    const shouldPatchHighlight = shouldBackfillHighlightedText(currentRevision.content, seed.content);
+
+    if (!shouldReplacePlaceholder && !shouldPatchHighlight) {
       continue;
     }
 
     const nextVersion = (page.revisions[0]?.version ?? currentRevision.version) + 1;
+    const nextContent = shouldReplacePlaceholder
+      ? seed.content
+      : {
+          ...(currentRevision.content as Record<string, unknown>),
+          highlightedText: (seed.content as GenericContent).highlightedText,
+        };
+    const nextMetadata = shouldReplacePlaceholder ? seed.metadata : currentRevision.metadata;
     const revision = await prisma.pageRevision.create({
       data: {
         pageId: page.id,
         version: nextVersion,
-        metadata: toJson(seed.metadata),
-        content: toJson(seed.content),
+        metadata: toJson(nextMetadata),
+        content: toJson(nextContent),
       },
     });
 

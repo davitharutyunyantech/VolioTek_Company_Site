@@ -4,7 +4,7 @@ import { ArrowRight, BadgeCheck, ClipboardList, FileText, Scale } from 'lucide-r
 import { buildManagedMetadata } from '@/lib/content/metadata';
 import { getPublishedPage } from '@/lib/content/store';
 import { genericPageContentSchema } from '@/lib/content/schemas';
-import { DetailList, FinalCta, HeroPanel, PageHero, PublicPageShell, SplitSection } from '../components/PublicPageBlocks';
+import { DetailList, FinalCta, HeroPanel, HighlightedText, PageHero, PublicPageShell, SplitSection } from '../components/PublicPageBlocks';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -74,7 +74,7 @@ export default async function TermsOfServicePage() {
       <PageHero
         eyebrow="Terms of Service"
         EyebrowIcon={Scale}
-        title={content.headline}
+        title={<HighlightedText text={content.headline} highlight={content.highlightedText} />}
         description={content.description}
         gridClassName="lg:grid-cols-[1.02fr_0.98fr]"
       >

@@ -21,6 +21,7 @@ import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { ManagedContentSections } from '../components/ManagedContentSections';
 import { MotionReveal } from '../components/MotionReveal';
+import { HighlightedText } from '../components/PublicPageBlocks';
 import { SecurityMesh } from '../components/SecurityMesh';
 
 export const dynamic = 'force-dynamic';
@@ -170,7 +171,7 @@ export default async function DocumentationPage() {
                   delay={90}
                   className="mt-8 max-w-4xl text-5xl font-semibold leading-tight text-[#F0FFFD] lg:text-6xl xl:text-7xl"
                 >
-                  {content.headline}
+                  <HighlightedText text={content.headline} highlight={content.highlightedText} />
                 </MotionReveal>
 
                 <MotionReveal

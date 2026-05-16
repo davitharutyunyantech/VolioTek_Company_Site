@@ -89,6 +89,7 @@ export type HomeContent = z.infer<typeof homeContentSchema>;
 
 export const genericPageContentSchema = z.object({
   headline: z.string().min(1).max(220),
+  highlightedText: z.string().max(120).optional().default(''),
   description: z.string().min(20).max(700),
   sections: z
     .array(

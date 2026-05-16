@@ -6,7 +6,7 @@ import { Archive, ArrowDown, ArrowUp, EyeOff, Plus, RotateCcw, Save, Trash2, Upl
 
 import { adminJsonHeaders, adminMutationHeaders } from '@/lib/admin/csrf';
 import type { EditablePage } from '@/lib/content/store';
-import type { GenericPageContent, HomeContent } from '@/lib/content/schemas';
+import { genericPageContentSchema, type GenericPageContent, type HomeContent } from '@/lib/content/schemas';
 
 type Action = HomeContent['hero']['primaryAction'];
 type CardSection = 'capabilities' | 'security' | 'useCases';
@@ -71,6 +71,22 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
   );
 }
 
+function normalizeGenericContent(content: unknown): GenericPageContent {
+  const parsed = genericPageContentSchema.safeParse(content);
+
+  if (parsed.success) {
+    return parsed.data;
+  }
+
+  const fallback = content as Partial<GenericPageContent>;
+  return {
+    headline: fallback.headline ?? '',
+    highlightedText: fallback.highlightedText ?? '',
+    description: fallback.description ?? '',
+    sections: Array.isArray(fallback.sections) ? fallback.sections : [],
+  };
+}
+
 function ActionFields({
   idPrefix,
   title,
@@ -111,7 +127,7 @@ export function PageEditor({ page }: { page: EditablePage }) {
   const [description, setDescription] = useState(page.metadata.description);
   const [canonical, setCanonical] = useState(page.metadata.canonical);
   const [homeContent, setHomeContent] = useState(page.content as HomeContent);
-  const [genericContent, setGenericContent] = useState(page.content as GenericPageContent);
+  const [genericContent, setGenericContent] = useState(() => normalizeGenericContent(page.content));
   const [contentJson, setContentJson] = useState(JSON.stringify(page.content, null, 2));
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -494,6 +510,12 @@ function GenericPageEditor({
           label="Headline"
           value={content.headline}
           onChange={(value) => updateGeneric('headline', value)}
+        />
+        <Field
+          id="generic-highlighted-text"
+          label="Highlighted text"
+          value={content.highlightedText}
+          onChange={(value) => updateGeneric('highlightedText', value)}
         />
         <TextArea
           id="generic-description"
