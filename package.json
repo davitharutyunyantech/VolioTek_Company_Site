@@ -8,8 +8,10 @@
   },
   "scripts": {
     "build": "next build",
+    "build:vercel": "node scripts/vercel-build.mjs",
     "dev": "next dev",
     "lint": "eslint",
+    "prisma:deploy": "prisma migrate deploy",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "seed:admin": "tsx scripts/seed-admin.ts",
