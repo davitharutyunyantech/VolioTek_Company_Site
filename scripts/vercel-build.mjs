@@ -15,12 +15,14 @@ function run(command, args) {
   }
 }
 
-const isVercelProduction = process.env.VERCEL === '1' && process.env.VERCEL_ENV === 'production';
+const branch = process.env.VERCEL_GIT_COMMIT_REF;
+const shouldRunMigrations = process.env.VERCEL === '1' && (branch === 'dev' || branch === 'main');
 
-if (isVercelProduction) {
+if (shouldRunMigrations) {
+  run('npm', ['run', 'prisma:generate']);
   run('npm', ['run', 'prisma:deploy']);
 } else {
-  console.log('Skipping production database migrations for this build.');
+  console.log(`Skipping database migrations for branch: ${branch ?? 'unknown'}`);
 }
 
 run('npm', ['run', 'build']);
