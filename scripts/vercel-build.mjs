@@ -19,6 +19,7 @@ const branch = process.env.VERCEL_GIT_COMMIT_REF;
 const shouldRunMigrations = process.env.VERCEL === '1' && (branch === 'dev' || branch === 'main');
 
 if (shouldRunMigrations) {
+  console.log(`Running database migrations for branch: ${branch}`);
   run('npm', ['run', 'prisma:generate']);
   run('npm', ['run', 'prisma:deploy']);
 } else {
