@@ -388,7 +388,8 @@ export const ModelName = {
   SitePage: 'SitePage',
   PageRevision: 'PageRevision',
   AuditEvent: 'AuditEvent',
-  Inquiry: 'Inquiry'
+  Inquiry: 'Inquiry',
+  DeploymentMigrationProbe: 'DeploymentMigrationProbe'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "adminUser" | "sitePage" | "pageRevision" | "auditEvent" | "inquiry"
+    modelProps: "adminUser" | "sitePage" | "pageRevision" | "auditEvent" | "inquiry" | "deploymentMigrationProbe"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +779,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DeploymentMigrationProbe: {
+      payload: Prisma.$DeploymentMigrationProbePayload<ExtArgs>
+      fields: Prisma.DeploymentMigrationProbeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DeploymentMigrationProbeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DeploymentMigrationProbeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload>
+        }
+        findFirst: {
+          args: Prisma.DeploymentMigrationProbeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DeploymentMigrationProbeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload>
+        }
+        findMany: {
+          args: Prisma.DeploymentMigrationProbeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload>[]
+        }
+        create: {
+          args: Prisma.DeploymentMigrationProbeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload>
+        }
+        createMany: {
+          args: Prisma.DeploymentMigrationProbeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DeploymentMigrationProbeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload>[]
+        }
+        delete: {
+          args: Prisma.DeploymentMigrationProbeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload>
+        }
+        update: {
+          args: Prisma.DeploymentMigrationProbeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload>
+        }
+        deleteMany: {
+          args: Prisma.DeploymentMigrationProbeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DeploymentMigrationProbeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DeploymentMigrationProbeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload>[]
+        }
+        upsert: {
+          args: Prisma.DeploymentMigrationProbeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeploymentMigrationProbePayload>
+        }
+        aggregate: {
+          args: Prisma.DeploymentMigrationProbeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDeploymentMigrationProbe>
+        }
+        groupBy: {
+          args: Prisma.DeploymentMigrationProbeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeploymentMigrationProbeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DeploymentMigrationProbeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeploymentMigrationProbeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -888,6 +963,15 @@ export const InquiryScalarFieldEnum = {
 } as const
 
 export type InquiryScalarFieldEnum = (typeof InquiryScalarFieldEnum)[keyof typeof InquiryScalarFieldEnum]
+
+
+export const DeploymentMigrationProbeScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  createdAt: 'createdAt'
+} as const
+
+export type DeploymentMigrationProbeScalarFieldEnum = (typeof DeploymentMigrationProbeScalarFieldEnum)[keyof typeof DeploymentMigrationProbeScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1184,6 +1268,7 @@ export type GlobalOmitConfig = {
   pageRevision?: Prisma.PageRevisionOmit
   auditEvent?: Prisma.AuditEventOmit
   inquiry?: Prisma.InquiryOmit
+  deploymentMigrationProbe?: Prisma.DeploymentMigrationProbeOmit
 }
 
 /* Types for Logging */
