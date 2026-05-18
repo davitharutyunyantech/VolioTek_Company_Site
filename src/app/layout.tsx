@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 
-import { DeploymentMigrationProbe } from './components/DeploymentMigrationProbe';
 import '@fontsource/ibm-plex-sans/400.css';
 import '@fontsource/ibm-plex-sans/500.css';
 import '@fontsource/ibm-plex-sans/600.css';
@@ -221,10 +220,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>
-        {children}
-        <DeploymentMigrationProbe />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

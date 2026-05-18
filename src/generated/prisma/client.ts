@@ -66,8 +66,3 @@ export type AuditEvent = Prisma.AuditEventModel
  * 
  */
 export type Inquiry = Prisma.InquiryModel
-/**
- * Model DeploymentMigrationProbe
- * 
- */
-export type DeploymentMigrationProbe = Prisma.DeploymentMigrationProbeModel

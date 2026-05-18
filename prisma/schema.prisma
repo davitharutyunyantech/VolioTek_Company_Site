@@ -117,9 +117,3 @@ model Inquiry {
   @@index([type, createdAt])
   @@index([email])
 }
-
-model DeploymentMigrationProbe {
-  id        String   @id
-  label     String
-  createdAt DateTime @default(now())
-}

@@ -55,8 +55,7 @@ export const ModelName = {
   SitePage: 'SitePage',
   PageRevision: 'PageRevision',
   AuditEvent: 'AuditEvent',
-  Inquiry: 'Inquiry',
-  DeploymentMigrationProbe: 'DeploymentMigrationProbe'
+  Inquiry: 'Inquiry'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -146,15 +145,6 @@ export const InquiryScalarFieldEnum = {
 } as const
 
 export type InquiryScalarFieldEnum = (typeof InquiryScalarFieldEnum)[keyof typeof InquiryScalarFieldEnum]
-
-
-export const DeploymentMigrationProbeScalarFieldEnum = {
-  id: 'id',
-  label: 'label',
-  createdAt: 'createdAt'
-} as const
-
-export type DeploymentMigrationProbeScalarFieldEnum = (typeof DeploymentMigrationProbeScalarFieldEnum)[keyof typeof DeploymentMigrationProbeScalarFieldEnum]
 
 
 export const SortOrder = {
